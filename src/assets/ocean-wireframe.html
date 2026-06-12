@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OCEAN App — Full Flow Wireframe</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #e9e5df; font-family: 'Courier New', monospace; overflow: auto; }
+.canvas { width: 2300px; min-height: 3340px; position: relative; }
+
+/* SCREEN */
+.sc { position: absolute; width: 200px; background: #fff; border: 1.5px solid #c5bfb8; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+.sc.hl { border-color: #1a1a1a; border-width: 2px; }
+.hd { background: #1a1a1a; color: #fff; padding: 6px 10px; display: flex; justify-content: space-between; align-items: center; }
+.hd .t { font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
+.hd .n { font-size: 7px; opacity: .4; letter-spacing: 1px; }
+.bd { padding: 10px 11px; }
+
+/* TYPOGRAPHY */
+.h1 { font-size: 11px; font-weight: 700; color: #111; margin-bottom: 4px; line-height: 1.3; }
+.h2 { font-size: 9px; font-weight: 700; color: #111; margin-bottom: 4px; letter-spacing: 1px; text-transform: uppercase; }
+.sub { font-size: 8px; color: #777; line-height: 1.5; margin-bottom: 6px; }
+.lbl { display: block; font-size: 7px; letter-spacing: 2px; text-transform: uppercase; color: #aaa; margin-top: 7px; margin-bottom: 3px; }
+.hr { border: none; border-top: 1px solid #f0ece6; margin: 7px 0; }
+
+/* BUTTONS */
+.btn { display: block; padding: 7px 10px; text-align: center; font-size: 8px; letter-spacing: .5px; border-radius: 3px; margin-bottom: 3px; }
+.bp { background: #1a1a1a; color: #fff; border: none; }
+.bs { background: #fff; color: #1a1a1a; border: 1.5px solid #1a1a1a; }
+.bg { background: #fff; color: #666; border: 1px solid #ddd; }
+.bln { display: block; background: transparent; color: #888; border: none; font-size: 7.5px; text-decoration: underline; text-align: center; padding: 3px 0; }
+.dest { display: block; font-size: 6px; color: #bbb; font-style: italic; text-align: center; margin-top: -2px; margin-bottom: 4px; letter-spacing: .5px; }
+
+/* INPUTS */
+.inp { width: 100%; height: 24px; border: 1px solid #e0d8d0; border-radius: 3px; margin-bottom: 5px; padding: 0 8px; font-size: 8px; color: #bbb; display: flex; align-items: center; background: #fafaf8; }
+
+/* TABS */
+.tabs { display: flex; border-bottom: 1.5px solid #e8e2da; margin-bottom: 8px; }
+.tab { flex: 1; padding: 5px; font-size: 8px; text-align: center; color: #bbb; }
+.tab.on { color: #1a1a1a; font-weight: 700; border-bottom: 2px solid #1a1a1a; }
+
+/* BOTTOM NAV */
+.nav { display: flex; border-top: 1px solid #e8e2da; margin-top: 7px; padding-top: 4px; }
+.ni { flex: 1; padding: 3px 1px; font-size: 5.5px; text-align: center; color: #ccc; letter-spacing: .5px; text-transform: uppercase; }
+.ni.on { color: #1a1a1a; font-weight: 700; }
+
+/* OCEAN BARS */
+.obs { margin: 5px 0; }
+.ob { margin-bottom: 4px; }
+.obh { display: flex; justify-content: space-between; font-size: 7px; color: #888; margin-bottom: 2px; }
+.obt { height: 5px; background: #f0ece6; border-radius: 3px; overflow: hidden; }
+.obf { height: 100%; background: #1a1a1a; border-radius: 3px; }
+
+/* SCALE */
+.scale { display: flex; gap: 3px; margin: 5px 0; }
+.sd { flex: 1; height: 20px; border: 1px solid #d0cac3; border-radius: 3px; font-size: 7px; color: #bbb; display: flex; align-items: center; justify-content: center; }
+.sd.on { background: #1a1a1a; border-color: #1a1a1a; color: #fff; }
+.slab { display: flex; justify-content: space-between; font-size: 6px; color: #bbb; }
+
+/* PROGRESS */
+.prog { height: 3px; background: #f0ece6; border-radius: 2px; overflow: hidden; margin-bottom: 7px; }
+.pf { height: 100%; background: #1a1a1a; }
+
+/* CARD */
+.card { border: 1px solid #e8e2da; border-radius: 4px; padding: 8px; margin-bottom: 5px; }
+
+/* CHIPS */
+.chip { display: inline-block; padding: 2px 6px; background: #f0ece6; border-radius: 10px; font-size: 6.5px; color: #666; margin: 2px 1px; }
+.chipd { display: inline-block; padding: 2px 6px; background: #1a1a1a; border-radius: 10px; font-size: 6.5px; color: #fff; margin: 2px 1px; }
+
+/* USER CARD */
+.uc { display: flex; align-items: center; gap: 6px; padding: 6px 0; border-bottom: 1px solid #f5f0ea; }
+.av { width: 22px; height: 22px; border-radius: 50%; background: #d8d0c8; flex-shrink: 0; }
+.av-lg { width: 38px; height: 38px; border-radius: 50%; background: #d8d0c8; display: block; margin: 0 auto 6px; }
+
+/* COMPARE BARS */
+.cbr { display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
+.cbl { font-size: 7px; color: #888; width: 9px; }
+.cbt { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.cby { height: 5px; background: #1a1a1a; border-radius: 2px; }
+.cbt2 { height: 4px; background: #ccc; border-radius: 2px; }
+
+/* CHAT */
+.bai { background: #f5f1ec; border-radius: 8px 8px 8px 2px; padding: 6px 8px; font-size: 7px; color: #444; line-height: 1.5; margin-bottom: 5px; max-width: 92%; }
+.bu { background: #1a1a1a; border-radius: 8px 8px 2px 8px; padding: 6px 8px; font-size: 7px; color: #fff; line-height: 1.5; margin-bottom: 5px; margin-left: auto; max-width: 80%; }
+.cf { display: flex; gap: 4px; border-top: 1px solid #f0ece6; padding-top: 6px; margin-top: 5px; align-items: center; }
+.cfi { flex: 1; height: 22px; border: 1px solid #e0d8d0; border-radius: 11px; padding: 0 8px; font-size: 7px; color: #bbb; display: flex; align-items: center; }
+.cfs { width: 22px; height: 22px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 10px; flex-shrink: 0; }
+
+/* TOGGLE */
+.trow { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f5f0ea; font-size: 8px; color: #555; }
+.sw { width: 26px; height: 14px; background: #1a1a1a; border-radius: 7px; flex-shrink: 0; }
+.sw.off { background: #ccc; }
+
+/* RADIO */
+.ro { font-size: 8px; color: #555; padding: 3px 0; display: flex; align-items: center; gap: 5px; }
+.ro::before { content: '○'; color: #ccc; flex-shrink: 0; }
+.ro.on::before { content: '●'; color: #1a1a1a; }
+
+/* ANNOTATION */
+.ann { font-size: 6.5px; color: #aaa; font-style: italic; border-top: 1px dashed #e8e2da; margin-top: 8px; padding-top: 6px; line-height: 1.8; }
+
+/* MISC */
+.illo { width: 100%; height: 52px; background: repeating-linear-gradient(45deg,#f5f1ec,#f5f1ec 3px,#fff 3px,#fff 9px); border-radius: 4px; margin-bottom: 8px; display: flex; align-items: center; justify-content: center; font-size: 7px; color: #ccc; letter-spacing: 1px; }
+.dots { display: flex; justify-content: center; gap: 4px; margin: 7px 0; }
+.dot { width: 5px; height: 5px; border-radius: 50%; background: #ddd; }
+.dot.on { background: #1a1a1a; }
+.plbl { position: absolute; font-size: 8px; letter-spacing: 3px; text-transform: uppercase; color: #b0a898; }
+.mob { display: flex; gap: 2px; align-items: flex-end; height: 22px; margin: 4px 0; }
+.mobi { display: flex; flex-direction: column; align-items: center; gap: 1px; flex: 1; }
+.mobb { width: 100%; background: #1a1a1a; border-radius: 1px 1px 0 0; }
+.mobl { font-size: 5px; color: #aaa; }
+.fcrd { border: 1px solid #e8e2da; border-radius: 4px; padding: 7px; margin-bottom: 5px; }
+.fn { font-size: 8px; font-weight: 700; color: #111; margin-bottom: 2px; }
+.fb { font-size: 6.5px; color: #777; line-height: 1.5; }
+.modal { position: absolute; width: 160px; background: #fff; border: 2px solid #1a1a1a; border-radius: 6px; padding: 11px; box-shadow: 0 8px 28px rgba(0,0,0,.2); z-index: 20; }
+.lchart { height: 40px; border-left: 1.5px solid #ccc; border-bottom: 1.5px solid #ccc; position: relative; margin: 6px 0; overflow: hidden; }
+.arrows { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; }
+</style>
+</head>
+<body>
+<div class="canvas">
+
+<!-- ══════════════════════════ SVG ARROW LAYER ══════════════════════════ -->
+<svg class="arrows" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <marker id="a"  viewBox="0 0 8 8" markerWidth="5" markerHeight="5" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8 1.5,4" fill="#888"/></marker>
+  <marker id="ab" viewBox="0 0 8 8" markerWidth="5" markerHeight="5" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8 1.5,4" fill="#555"/></marker>
+  <marker id="ag" viewBox="0 0 8 8" markerWidth="5" markerHeight="5" refX="7" refY="4" orient="auto"><polygon points="0,0 8,4 0,8 1.5,4" fill="#bbb"/></marker>
+</defs>
+
+<!-- ROW 1: Onboarding horizontals (y=200) -->
+<line x1="261" y1="200" x2="318" y2="200" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="521" y1="200" x2="578" y2="200" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="781" y1="200" x2="838" y2="200" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="1041" y1="200" x2="1098" y2="200" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<!-- Skip shortcut S02,S03 → S05 (above row) -->
+<path d="M 430,82 L 430,56 L 1200,56 L 1200,82" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#ag)"/>
+<text x="680" y="51" font-size="7" fill="#ccc" font-family="Courier New">SKIP → goes to S05 Auth</text>
+
+<!-- WRAP R1→R2 (S05→S06) -->
+<path d="M 1200,556 L 1200,596 L 160,596 L 160,622" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="500" y="589" font-size="7" fill="#aaa" font-family="Courier New" letter-spacing="1">AUTH COMPLETE → PROFILE SETUP</text>
+
+<!-- ROW 2: Setup horizontals (y=755) -->
+<line x1="261" y1="755" x2="318" y2="755" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="521" y1="755" x2="578" y2="755" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- WRAP R2→R3 (S08→S09) -->
+<path d="M 680,1004 L 680,1062 L 160,1062 L 160,1122" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="260" y="1055" font-size="7" fill="#aaa" font-family="Courier New" letter-spacing="1">START TEST</text>
+
+<!-- ROW 3: Test flow horizontals (y=1260) -->
+<line x1="261" y1="1260" x2="318" y2="1260" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="521" y1="1260" x2="578" y2="1260" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="781" y1="1260" x2="838" y2="1260" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="1041" y1="1260" x2="1098" y2="1260" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="1301" y1="1260" x2="1358" y2="1260" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<!-- Save & Exit modal branch (left of S09) -->
+<path d="M 60,1208 L 18,1208 L 18,1348 L 270,1348" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#ag)"/>
+<text x="14" y="1200" font-size="6" fill="#ccc" font-family="Courier New" writing-mode="vertical-rl">SAVE &amp; EXIT → modal</text>
+
+<!-- WRAP R3→R4 (S14→S15) -->
+<path d="M 1460,1494 L 1460,1574 L 160,1574 L 160,1662" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="560" y="1567" font-size="7" fill="#aaa" font-family="Courier New" letter-spacing="1">RESULTS VIEWED → DRIFT SETUP</text>
+
+<!-- ROW 4: Home horizontal (y=1800) -->
+<line x1="261" y1="1800" x2="318" y2="1800" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- S16 HOME BRANCHES -->
+<!-- → S17 Explore -->
+<path d="M 390,2094 L 390,2152 L 160,2152 L 160,2202" stroke="#555" stroke-width="1.5" stroke-dasharray="6,3" fill="none" marker-end="url(#ab)"/>
+<text x="164" y="2145" font-size="6.5" fill="#aaa" font-family="Courier New">"Explore People"</text>
+<!-- → S21 Context -->
+<path d="M 490,2094 L 490,2166 L 1280,2166 L 1280,2202" stroke="#555" stroke-width="1.5" stroke-dasharray="6,3" fill="none" marker-end="url(#ab)"/>
+<text x="720" y="2159" font-size="6.5" fill="#aaa" font-family="Courier New">"Test in Context"</text>
+<!-- → S25 Chat -->
+<path d="M 358,2094 L 358,2700 L 160,2700 L 160,2742" stroke="#555" stroke-width="1.5" stroke-dasharray="6,3" fill="none" marker-end="url(#ab)"/>
+<text x="28" y="2430" font-size="6" fill="#ccc" font-family="Courier New" writing-mode="vertical-rl" transform="rotate(180,34,2430)">"Chat with AI"</text>
+<!-- → S26 Profile (bottom nav) -->
+<path d="M 452,2094 L 452,2710 L 420,2710 L 420,2742" stroke="#bbb" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#ag)"/>
+
+<!-- ROW 5 Social: S17→S18→S19→S20 (y=2360) -->
+<line x1="261" y1="2360" x2="318" y2="2360" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="521" y1="2360" x2="578" y2="2360" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="781" y1="2360" x2="838" y2="2360" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- S19→S24 Work Insights skip (above row) -->
+<path d="M 680,2202 L 680,2172 L 2060,2172 L 2060,2202" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#ag)"/>
+<text x="1180" y="2166" font-size="6.5" fill="#ccc" font-family="Courier New">"Work Insights" from Compare → S24</text>
+
+<!-- S18→S24 Work Context skip (above row, slightly different y) -->
+<path d="M 520,2310 L 540,2310 L 540,2180 L 2060,2180 L 2060,2202" stroke="#bbb" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#ag)"/>
+
+<!-- ROW 5 Context: S21→S22→S23→S24 (y=2360) -->
+<line x1="1381" y1="2360" x2="1438" y2="2360" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="1641" y1="2360" x2="1698" y2="2360" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<line x1="1901" y1="2360" x2="1958" y2="2360" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+
+<!-- S23 "Back to Home" (below row5) -->
+<path d="M 1800,2594 L 1800,2666 L 350,2666 L 350,2094" stroke="#bbb" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#ag)"/>
+<text x="900" y="2660" font-size="6.5" fill="#ccc" font-family="Courier New">"Back to Home" → S16</text>
+
+<!-- ROW 6: S26→S27 (y=2900) -->
+<line x1="521" y1="2900" x2="578" y2="2900" stroke="#888" stroke-width="1.5" marker-end="url(#a)"/>
+<!-- S26→S28 Privacy (skip, below row) -->
+<path d="M 420,3124 L 420,3166 L 940,3166 L 940,3124" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="580" y="3178" font-size="6.5" fill="#aaa" font-family="Courier New">Privacy Settings link</text>
+<!-- S26→S29 Notifications (skip, below row) -->
+<path d="M 450,3124 L 450,3190 L 1200,3190 L 1200,3124" stroke="#888" stroke-width="1.5" fill="none" marker-end="url(#a)"/>
+<text x="750" y="3202" font-size="6.5" fill="#aaa" font-family="Courier New">Notifications link</text>
+<!-- S27 Retake → S07 Test Intro (dashed) -->
+<path d="M 680,2742 L 680,2710 L 420,2710" stroke="#bbb" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#ag)"/>
+<text x="480" y="2706" font-size="6" fill="#ccc" font-family="Courier New">Retake → S07</text>
+<!-- S26 View Full Results → S12 (long range, noted only) -->
+</svg>
+
+<!-- ══════════════════════════ PHASE LABELS ══════════════════════════ -->
+<span class="plbl" style="left:60px;top:52px;">Phase 1 — Onboarding</span>
+<span class="plbl" style="left:60px;top:592px;">Phase 2 — Account &amp; Setup</span>
+<span class="plbl" style="left:60px;top:1092px;">Phase 3 — Test Flow</span>
+<span class="plbl" style="left:60px;top:1632px;">Phase 4 — Home</span>
+<span class="plbl" style="left:60px;top:2172px;">Phase 5A — Social &amp; Explore</span>
+<span class="plbl" style="left:1180px;top:2172px;">Phase 5B — Context Testing</span>
+<span class="plbl" style="left:60px;top:2712px;">Phase 6 — Profile, Chat &amp; Settings</span>
+
+<!-- ══════════════════════════ SCREEN DEFINITIONS ══════════════════════════ -->
+
+<!-- S01 SPLASH -->
+<div class="sc" style="left:60px;top:82px;">
+  <div class="hd"><span class="t">Splash</span><span class="n">S01</span></div>
+  <div class="bd" style="text-align:center;padding:18px 12px 12px;">
+    <div style="font-size:24px;font-weight:700;letter-spacing:6px;color:#111;margin-bottom:5px;">OCEAN</div>
+    <div style="font-size:8px;color:#aaa;letter-spacing:2px;line-height:1.6;">Understand yourself.<br>Track your growth.</div>
+    <div style="margin-top:16px;display:flex;justify-content:center;gap:5px;">
+      <div style="width:5px;height:5px;border-radius:50%;background:#1a1a1a;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#ccc;"></div>
+      <div style="width:5px;height:5px;border-radius:50%;background:#ccc;"></div>
+    </div>
+    <div class="ann" style="text-align:left;">→ Auto-navigates to S02 after 2s<br>→ No user action required</div>
+  </div>
+</div>
+
+<!-- S02 ONBOARD 1 -->
+<div class="sc" style="left:320px;top:82px;">
+  <div class="hd"><span class="t">Onboard 1</span><span class="n">S02</span></div>
+  <div class="bd" style="text-align:center;">
+    <div class="illo">[ ILLUSTRATION ]</div>
+    <div class="h1">You are not a fixed type.</div>
+    <div class="sub">Big Five measures where you sit on 5 real psychological spectrums. Not a label — a position that shifts as you grow.</div>
+    <div class="dots"><div class="dot on"></div><div class="dot"></div><div class="dot"></div></div>
+    <a class="bln">Skip →</a><span class="dest">→ goes to S05 Auth</span>
+    <button class="btn bp">Next →</button><span class="dest">→ goes to S03</span>
+  </div>
+</div>
+
+<!-- S03 ONBOARD 2 -->
+<div class="sc" style="left:580px;top:82px;">
+  <div class="hd"><span class="t">Onboard 2</span><span class="n">S03</span></div>
+  <div class="bd" style="text-align:center;">
+    <div class="illo">[ ILLUSTRATION ]</div>
+    <div class="h1">You change. Your data should too.</div>
+    <div class="sub">Every 90 days, retake the test. See what shifted, what grew, what stayed the same.</div>
+    <div class="dots"><div class="dot"></div><div class="dot on"></div><div class="dot"></div></div>
+    <a class="bln">Skip →</a><span class="dest">→ goes to S05 Auth</span>
+    <button class="btn bp">Next →</button><span class="dest">→ goes to S04</span>
+  </div>
+</div>
+
+<!-- S04 ONBOARD 3 -->
+<div class="sc" style="left:840px;top:82px;">
+  <div class="hd"><span class="t">Onboard 3</span><span class="n">S04</span></div>
+  <div class="bd" style="text-align:center;">
+    <div class="illo">[ ILLUSTRATION ]</div>
+    <div class="h1">See yourself through real people.</div>
+    <div class="sub">Compare your exact scores with others on the app. No archetypes. Real numbers. Real people.</div>
+    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot on"></div></div>
+    <button class="btn bp" style="margin-top:6px;">Get Started →</button>
+    <span class="dest">→ goes to S05 Auth</span>
+  </div>
+</div>
+
+<!-- S05 AUTH -->
+<div class="sc" style="left:1100px;top:82px;">
+  <div class="hd"><span class="t">Auth</span><span class="n">S05</span></div>
+  <div class="bd">
+    <div class="tabs"><div class="tab on">Sign Up</div><div class="tab">Log In</div></div>
+    <div style="font-size:7px;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">— Sign Up State —</div>
+    <span class="lbl">Full Name</span><div class="inp">Enter your name</div>
+    <span class="lbl">Email</span><div class="inp">Enter your email</div>
+    <span class="lbl">Password</span><div class="inp">Create password</div>
+    <button class="btn bp" style="margin-top:6px;">Create Account</button>
+    <span class="dest">→ goes to S06 Profile Setup</span>
+    <div class="hr"></div>
+    <div style="font-size:7px;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">— Log In State (tab) —</div>
+    <div class="inp">Email</div>
+    <div class="inp">Password</div>
+    <button class="btn bs">Log In</button>
+    <span class="dest">→ New user → S06 | Returning (test done) → S16</span>
+    <a class="bln">Forgot password?</a>
+    <span class="dest">→ password reset flow (email)</span>
+    <div class="ann">→ Tab toggles between Sign Up / Log In states<br>→ Both states visible on same screen</div>
+  </div>
+</div>
+
+<!-- S06 PROFILE SETUP -->
+<div class="sc" style="left:60px;top:622px;">
+  <div class="hd"><span class="t">Profile Setup</span><span class="n">S06</span></div>
+  <div class="bd">
+    <div class="h1">Set up your profile</div>
+    <div style="text-align:center;margin:8px 0;">
+      <div class="av-lg"></div>
+      <a class="bln" style="font-size:7px;">+ Upload photo</a>
+    </div>
+    <span class="lbl">Display Name</span><div class="inp">Your display name</div>
+    <span class="lbl">Age (optional)</span><div class="inp">Your age</div>
+    <div class="hr"></div>
+    <span class="lbl">Who can see my profile?</span>
+    <div class="ro on">Public</div>
+    <div class="ro">Friends only</div>
+    <div class="ro">Private</div>
+    <div class="hr"></div>
+    <span class="lbl">Who can compare with me?</span>
+    <div class="ro on">Everyone</div>
+    <div class="ro">Only mutual connections</div>
+    <div class="ro">Nobody</div>
+    <button class="btn bp" style="margin-top:9px;">Continue →</button>
+    <span class="dest">→ goes to S07 Test Intro</span>
+    <a class="bln">Skip for now</a>
+    <span class="dest">→ also goes to S07 (defaults applied)</span>
+  </div>
+</div>
+
+<!-- S07 TEST INTRO -->
+<div class="sc" style="left:320px;top:622px;">
+  <div class="hd"><span class="t">Test Intro</span><span class="n">S07</span></div>
+  <div class="bd">
+    <div class="h1">The OCEAN Test</div>
+    <div style="display:flex;gap:10px;margin-bottom:7px;">
+      <span style="font-size:8px;color:#aaa;">50 questions</span>
+      <span style="font-size:8px;color:#aaa;">~10 minutes</span>
+    </div>
+    <div class="sub">Measures 5 real psychological dimensions:</div>
+    <div style="margin-bottom:8px;">
+      <span class="chip">O Openness</span>
+      <span class="chip">C Conscientiousness</span>
+      <span class="chip">E Extraversion</span>
+      <span class="chip">A Agreeableness</span>
+      <span class="chip">N Neuroticism</span>
+    </div>
+    <div class="sub">No types. No labels. Just your real position on each spectrum.</div>
+    <div class="card" style="padding:7px;">
+      <div style="font-size:7px;font-weight:700;color:#111;margin-bottom:3px;">How it's different</div>
+      <div style="font-size:7px;color:#666;line-height:1.5;">Unlike MBTI, your scores exist on a scale. 62% extraverted is different from 90%. You are not a box.</div>
+    </div>
+    <button class="btn bp">Take the Test →</button>
+    <span class="dest">→ goes to S08 Instructions</span>
+    <button class="btn bg">What does each trait mean? ↓</button>
+    <span class="dest">→ expands accordion (same screen, no nav)</span>
+    <div class="ann">→ Accordion expands to explain O/C/E/A/N inline</div>
+  </div>
+</div>
+
+<!-- S08 INSTRUCTIONS -->
+<div class="sc" style="left:580px;top:622px;">
+  <div class="hd"><span class="t">Instructions</span><span class="n">S08</span></div>
+  <div class="bd">
+    <div class="h1">How to Answer</div>
+    <div class="sub">Answer based on how you actually are — not how you want to be. No right or wrong answers.</div>
+    <span class="lbl">Example Question</span>
+    <div class="card">
+      <div style="font-size:8px;color:#444;margin-bottom:6px;">"I enjoy meeting strangers at social events."</div>
+      <div class="scale">
+        <div class="sd">1</div><div class="sd">2</div><div class="sd on">3</div><div class="sd">4</div><div class="sd">5</div>
+      </div>
+      <div class="slab"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+    </div>
+    <div class="sub">Be honest. The more honest, the more accurate your results.</div>
+    <span class="lbl">Choose Length</span>
+    <div style="display:flex;gap:6px;margin-bottom:8px;">
+      <div style="flex:1;border:1.5px dashed #ccc;border-radius:4px;padding:7px;text-align:center;font-size:8px;color:#888;">Short<br><span style="font-size:7px;color:#bbb;">25 Q · ~5min</span></div>
+      <div style="flex:1;border:1.5px solid #1a1a1a;border-radius:4px;padding:7px;text-align:center;font-size:8px;color:#111;font-weight:700;">Full<br><span style="font-size:7px;color:#aaa;font-weight:400;">50 Q · ~10min</span></div>
+    </div>
+    <button class="btn bp">Start Test →</button>
+    <span class="dest">→ goes to S09 Test Questions</span>
+    <div class="ann">→ Selected length sets question count<br>→ Short = 25 Qs across all 5 traits<br>→ Full = 50 Qs, more nuanced results</div>
+  </div>
+</div>
+
+<!-- S09 TEST QUESTIONS -->
+<div class="sc hl" style="left:60px;top:1122px;">
+  <div class="hd"><span class="t">Test Questions</span><span class="n">S09</span></div>
+  <div class="bd">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+      <span style="font-size:9px;font-weight:700;">12 / 50</span>
+      <button class="btn bg" style="padding:3px 8px;font-size:7px;margin:0;">Save &amp; Exit</button>
+    </div>
+    <span class="dest" style="text-align:right;margin-top:-2px;">→ opens Save &amp; Exit modal</span>
+    <div class="prog"><div class="pf" style="width:24%;"></div></div>
+    <div class="card">
+      <div style="font-size:8px;color:#444;line-height:1.5;margin-bottom:7px;">"I often worry about things that might go wrong."</div>
+      <div class="scale">
+        <div class="sd">1</div><div class="sd">2</div><div class="sd">3</div><div class="sd on">4</div><div class="sd">5</div>
+      </div>
+      <div class="slab"><span>Strongly Disagree</span><span>Strongly Agree</span></div>
+    </div>
+    <div style="font-size:7px;color:#aaa;font-style:italic;margin-bottom:6px;">
+      Sample Qs (loop 50 times):<br>
+      "I keep my belongings neat and tidy."<br>
+      "I enjoy exploring new ideas."<br>
+      "I find it easy to empathize with others."
+    </div>
+    <div style="display:flex;gap:5px;">
+      <button class="btn bg" style="flex:1;margin:0;">← Back</button>
+      <button class="btn bp" style="flex:1;margin:0;">Next →</button>
+    </div>
+    <span class="dest">← prev Q | → next Q | On Q50: "Finish Test →"</span>
+    <div class="ann">→ Finish Test → S10 Calculating<br>→ Must select scale before Next<br>→ Back allowed (answer editable)</div>
+  </div>
+</div>
+
+<!-- SAVE & EXIT MODAL -->
+<div class="modal" style="left:272px;top:1200px;">
+  <div style="font-size:9px;font-weight:700;color:#111;margin-bottom:5px;">Save &amp; Exit?</div>
+  <div style="font-size:7.5px;color:#666;line-height:1.5;margin-bottom:8px;">Your progress is saved. Pick up exactly where you left off.</div>
+  <button class="btn bs" style="font-size:7.5px;padding:6px;margin-bottom:3px;">Resume Later</button>
+  <span class="dest">→ goes to S16 Home</span>
+  <button class="btn bg" style="font-size:7.5px;padding:6px;">Cancel — Keep Going</button>
+  <span class="dest">→ closes modal, back to S09</span>
+</div>
+
+<!-- S10 CALCULATING -->
+<div class="sc" style="left:320px;top:1122px;">
+  <div class="hd"><span class="t">Calculating</span><span class="n">S10</span></div>
+  <div class="bd" style="text-align:center;padding:22px 12px 14px;">
+    <div style="font-size:28px;color:#ddd;margin-bottom:10px;">⟳</div>
+    <div class="h1">Analyzing your answers...</div>
+    <div class="sub">Calculating your OCEAN profile</div>
+    <div style="display:flex;justify-content:center;gap:4px;margin:10px 0;">
+      <span class="chip" style="opacity:.3;">O</span><span class="chip" style="opacity:.5;">C</span>
+      <span class="chip" style="opacity:.7;">E</span><span class="chip">A</span><span class="chip">N</span>
+    </div>
+    <div class="prog"><div class="pf" style="width:72%;"></div></div>
+    <div class="ann" style="text-align:left;">→ Auto-navigates to S11 after ~2s<br>→ No user input on this screen<br>→ Loading indicator animates</div>
+  </div>
+</div>
+
+<!-- S11 REVEAL -->
+<div class="sc" style="left:580px;top:1122px;">
+  <div class="hd"><span class="t">Reveal</span><span class="n">S11</span></div>
+  <div class="bd">
+    <div style="border:1.5px dashed #ccc;border-radius:6px;padding:22px 10px;text-align:center;">
+      <div style="font-size:8px;color:#aaa;letter-spacing:1px;margin-bottom:8px;">Your OCEAN profile is ready.</div>
+      <div class="h1" style="margin-bottom:14px;">Ready to see who<br>you really are?</div>
+      <button class="btn bp" style="font-size:9px;padding:10px 16px;">Reveal My Profile</button>
+      <span class="dest">→ goes to S12 Results</span>
+    </div>
+    <div class="ann">→ No back button on this screen<br>→ High-impact transition moment<br>→ Subtle animation on reveal tap</div>
+  </div>
+</div>
+
+<!-- S12 RESULTS SPECTRUM -->
+<div class="sc hl" style="left:840px;top:1122px;">
+  <div class="hd"><span class="t">Results · OCEAN</span><span class="n">S12</span></div>
+  <div class="bd">
+    <div class="h1">Your OCEAN Profile</div>
+    <div style="font-size:7px;color:#aaa;margin-bottom:8px;">Taken: Jun 6, 2026</div>
+    <div class="obs">
+      <div class="ob"><div class="obh"><span>Openness</span><span>78%</span></div><div class="obt"><div class="obf" style="width:78%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Conscientiousness</span><span>45%</span></div><div class="obt"><div class="obf" style="width:45%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Extraversion</span><span>62%</span></div><div class="obt"><div class="obf" style="width:62%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Agreeableness</span><span>71%</span></div><div class="obt"><div class="obf" style="width:71%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Neuroticism</span><span>34%</span></div><div class="obt"><div class="obf" style="width:34%;"></div></div></div>
+    </div>
+    <div style="font-size:8px;color:#555;font-style:italic;margin-bottom:8px;">"High in Openness &amp; Agreeableness."</div>
+    <button class="btn bp">What does each score mean? →</button>
+    <span class="dest">→ goes to S13 Trait Detail</span>
+    <button class="btn bs">See your full insights →</button>
+    <span class="dest">→ skips to S14 Insights</span>
+    <button class="btn bg">Share my results</button>
+    <span class="dest">→ native OS share sheet</span>
+  </div>
+</div>
+
+<!-- S13 TRAIT DETAIL -->
+<div class="sc" style="left:1100px;top:1122px;">
+  <div class="hd"><span class="t">Trait Detail</span><span class="n">S13</span></div>
+  <div class="bd">
+    <div class="h2">What Your Scores Mean</div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:8px;font-weight:700;">Openness · 78%</span><span style="font-size:8px;color:#aaa;">▲</span>
+      </div>
+      <div style="font-size:7px;color:#555;margin-top:4px;line-height:1.5;">You are highly curious, imaginative, open to new experiences. You seek novelty and think unconventionally. Art, ideas, and abstraction energize you.</div>
+    </div>
+    <div class="card" style="opacity:.75;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;">Conscientiousness · 45%</span><span style="font-size:8px;color:#aaa;">▼</span></div>
+      <div style="font-size:7px;color:#bbb;margin-top:3px;">Tap to expand</div>
+    </div>
+    <div class="card" style="opacity:.75;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;">Extraversion · 62%</span><span style="font-size:8px;color:#aaa;">▼</span></div>
+      <div style="font-size:7px;color:#bbb;margin-top:3px;">Tap to expand</div>
+    </div>
+    <div class="card" style="opacity:.75;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;">Agreeableness · 71%</span><span style="font-size:8px;color:#aaa;">▼</span></div>
+    </div>
+    <div class="card" style="opacity:.75;">
+      <div style="display:flex;justify-content:space-between;"><span style="font-size:8px;font-weight:700;">Neuroticism · 34%</span><span style="font-size:8px;color:#aaa;">▼</span></div>
+    </div>
+    <button class="btn bp" style="margin-top:4px;">Continue to Insights →</button>
+    <span class="dest">→ goes to S14</span>
+    <div class="ann">→ Each card expands on tap (accordion)<br>→ Only one card open at a time</div>
+  </div>
+</div>
+
+<!-- S14 PERSONAL INSIGHTS -->
+<div class="sc" style="left:1360px;top:1122px;">
+  <div class="hd"><span class="t">Insights</span><span class="n">S14</span></div>
+  <div class="bd">
+    <div class="h1">Based on your scores:</div>
+    <span class="lbl">Strengths</span>
+    <div class="card" style="padding:7px;">
+      <div style="font-size:7.5px;color:#333;line-height:1.7;">
+        ✓ Adapt quickly to new environments<br>
+        ✓ Build trust easily with others<br>
+        ✓ Think creatively under pressure<br>
+        ✓ Emotionally stable under stress
+      </div>
+    </div>
+    <span class="lbl">Blind Spots</span>
+    <div class="card" style="padding:7px;">
+      <div style="font-size:7.5px;color:#555;line-height:1.7;">
+        ✗ May avoid necessary conflict<br>
+        ✗ Can lose focus on long-term goals<br>
+        ✗ Finishes fewer things than started
+      </div>
+    </div>
+    <span class="lbl">What Triggers Change in You</span>
+    <div style="font-size:7.5px;color:#666;line-height:1.5;margin-bottom:8px;">Major life transitions tend to shift your Neuroticism score first. Openness stays stable longest.</div>
+    <button class="btn bp">Set Up Drift Tracking →</button>
+    <span class="dest">→ goes to S15</span>
+    <a class="bln">Skip to Home</a>
+    <span class="dest">→ goes to S16</span>
+  </div>
+</div>
+
+<!-- S15 DRIFT SETUP -->
+<div class="sc" style="left:60px;top:1662px;">
+  <div class="hd"><span class="t">Drift Tracking</span><span class="n">S15</span></div>
+  <div class="bd">
+    <div class="h1">Track Your Growth</div>
+    <div class="sub">Retake the test every 90 days to see how you change over time. Your scores will form a timeline.</div>
+    <span class="lbl">Remind me every</span>
+    <div class="ro on">90 days (recommended)</div>
+    <div class="ro">6 months</div>
+    <div class="ro">1 year</div>
+    <div class="ro">Remind me manually</div>
+    <span class="lbl">Next test date</span>
+    <div class="inp">Sep 6, 2026 (auto-calculated)</div>
+    <div class="trow">
+      <span>Turn on notifications</span>
+      <div class="sw"></div>
+    </div>
+    <div style="font-size:7px;color:#aaa;font-style:italic;margin:5px 0 8px;">"You'll get a gentle reminder when it's time."</div>
+    <button class="btn bp">Set Up Reminders →</button>
+    <span class="dest">→ goes to S16 Home</span>
+    <a class="bln">Skip, I'll remember</a>
+    <span class="dest">→ also goes to S16 Home</span>
+    <div class="ann">→ Notifications require OS permission<br>→ Permission prompt shown after tapping ON</div>
+  </div>
+</div>
+
+<!-- S16 HOME -->
+<div class="sc hl" style="left:320px;top:1662px;">
+  <div class="hd"><span class="t">Home</span><span class="n">S16</span></div>
+  <div class="bd">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <div style="display:flex;align-items:center;gap:7px;"><div class="av"></div><span style="font-size:9px;font-weight:700;">Hey, Arslan</span></div>
+      <span style="font-size:14px;cursor:pointer;">🔔</span>
+    </div>
+    <div class="card">
+      <div style="font-size:7px;color:#aaa;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;">Your OCEAN · Jun 2026</div>
+      <div class="mob">
+        <div class="mobi"><div class="mobb" style="height:20px;"></div><div class="mobl">O 78</div></div>
+        <div class="mobi"><div class="mobb" style="height:12px;"></div><div class="mobl">C 45</div></div>
+        <div class="mobi"><div class="mobb" style="height:17px;"></div><div class="mobl">E 62</div></div>
+        <div class="mobi"><div class="mobb" style="height:20px;"></div><div class="mobl">A 71</div></div>
+        <div class="mobi"><div class="mobb" style="height:8px;"></div><div class="mobl">N 34</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:5px;">
+        <span style="font-size:7px;color:#aaa;">Next test: Sep 6</span>
+        <a class="bln" style="font-size:7px;padding:0;text-decoration:none;color:#888;">Retake now →</a>
+      </div>
+    </div>
+    <span class="lbl">Quick Actions</span>
+    <button class="btn bp">Explore People</button>
+    <span class="dest">→ goes to S17</span>
+    <button class="btn bs">Compare with Someone</button>
+    <span class="dest">→ goes to S19</span>
+    <button class="btn bg">Test Yourself in Context</button>
+    <span class="dest">→ goes to S21</span>
+    <button class="btn bg">Chat with AI</button>
+    <span class="dest">→ goes to S25</span>
+    <div class="nav">
+      <div class="ni on">Home</div><div class="ni">Explore</div><div class="ni">Compare</div><div class="ni">Profile</div>
+    </div>
+    <div class="ann">→ Explore nav → S17<br>→ Compare nav → S19<br>→ Profile nav → S26<br>→ Retake now → S07</div>
+  </div>
+</div>
+
+<!-- S17 EXPLORE -->
+<div class="sc" style="left:60px;top:2202px;">
+  <div class="hd"><span class="t">Explore</span><span class="n">S17</span></div>
+  <div class="bd">
+    <div class="inp" style="margin-bottom:6px;">🔍  Search by name...</div>
+    <div style="display:flex;gap:3px;margin-bottom:8px;flex-wrap:wrap;">
+      <span class="chipd">All</span>
+      <span class="chip">High O</span>
+      <span class="chip">High A</span>
+      <span class="chip">Low N</span>
+      <span class="chip">High C</span>
+    </div>
+    <span class="lbl">People you might connect with</span>
+    <div class="uc">
+      <div class="av"></div>
+      <div style="flex:1;"><div style="font-size:8px;font-weight:700;">Sara K.</div><div style="font-size:6px;color:#aaa;">O81 C60 E44 A75 N28</div></div>
+      <button class="btn bs" style="padding:3px 7px;font-size:7px;margin:0;">Compare</button>
+    </div>
+    <span class="dest" style="text-align:right;">→ S19 Compare</span>
+    <div class="uc">
+      <div class="av"></div>
+      <div style="flex:1;"><div style="font-size:8px;font-weight:700;">Ravi M.</div><div style="font-size:6px;color:#aaa;">O55 C78 E70 A60 N45</div></div>
+      <button class="btn bs" style="padding:3px 7px;font-size:7px;margin:0;">Compare</button>
+    </div>
+    <div class="uc">
+      <div class="av"></div>
+      <div style="flex:1;"><div style="font-size:8px;font-weight:700;">Priya S.</div><div style="font-size:6px;color:#aaa;">O90 C38 E58 A82 N22</div></div>
+      <button class="btn bs" style="padding:3px 7px;font-size:7px;margin:0;">Compare</button>
+    </div>
+    <div class="nav">
+      <div class="ni">Home</div><div class="ni on">Explore</div><div class="ni">Compare</div><div class="ni">Profile</div>
+    </div>
+    <div class="ann">→ Tap user card → S18 User Profile<br>→ Tap Compare button → S19<br>→ Filter chips refine visible list<br>→ Only opt-in users shown</div>
+  </div>
+</div>
+
+<!-- S18 USER PROFILE VIEW -->
+<div class="sc" style="left:320px;top:2202px;">
+  <div class="hd"><span class="t">User Profile</span><span class="n">S18</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:8px;display:block;">← Back to Explore</a>
+    <div class="av-lg"></div>
+    <div style="text-align:center;margin-bottom:8px;">
+      <div style="font-size:10px;font-weight:700;">Sara K.</div>
+      <div style="font-size:7px;color:#aaa;">Test taken: Mar 2026</div>
+    </div>
+    <span class="lbl">Sara's OCEAN Profile</span>
+    <div class="obs">
+      <div class="ob"><div class="obh"><span>Openness</span><span>81%</span></div><div class="obt"><div class="obf" style="width:81%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Conscientiousness</span><span>60%</span></div><div class="obt"><div class="obf" style="width:60%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Extraversion</span><span>44%</span></div><div class="obt"><div class="obf" style="width:44%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Agreeableness</span><span>75%</span></div><div class="obt"><div class="obf" style="width:75%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>Neuroticism</span><span>28%</span></div><div class="obt"><div class="obf" style="width:28%;"></div></div></div>
+    </div>
+    <button class="btn bp">Compare With Me →</button>
+    <span class="dest">→ goes to S19 Compare</span>
+    <button class="btn bg">See in Work Context →</button>
+    <span class="dest">→ goes to S24 Work Fields</span>
+    <div class="nav">
+      <div class="ni">Home</div><div class="ni on">Explore</div><div class="ni">Compare</div><div class="ni">Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- S19 COMPARE -->
+<div class="sc hl" style="left:580px;top:2202px;">
+  <div class="hd"><span class="t">Compare</span><span class="n">S19</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:5px;display:block;">← Back</a>
+    <div class="h1" style="font-size:10px;">You vs Sara K.</div>
+    <div style="display:flex;gap:12px;font-size:7px;color:#888;margin-bottom:8px;"><span>■ You</span><span>□ Sara</span></div>
+    <div class="cbr"><span class="cbl">O</span><div class="cbt"><div class="cby" style="width:78%;"></div><div class="cbt2" style="width:81%;"></div></div><span style="font-size:7px;color:#aaa;width:32px;text-align:right;">78/81</span></div>
+    <div class="cbr"><span class="cbl">C</span><div class="cbt"><div class="cby" style="width:45%;"></div><div class="cbt2" style="width:60%;"></div></div><span style="font-size:7px;color:#aaa;width:32px;text-align:right;">45/60</span></div>
+    <div class="cbr"><span class="cbl">E</span><div class="cbt"><div class="cby" style="width:62%;"></div><div class="cbt2" style="width:44%;"></div></div><span style="font-size:7px;color:#aaa;width:32px;text-align:right;">62/44</span></div>
+    <div class="cbr"><span class="cbl">A</span><div class="cbt"><div class="cby" style="width:71%;"></div><div class="cbt2" style="width:75%;"></div></div><span style="font-size:7px;color:#aaa;width:32px;text-align:right;">71/75</span></div>
+    <div class="cbr"><span class="cbl">N</span><div class="cbt"><div class="cby" style="width:34%;"></div><div class="cbt2" style="width:28%;"></div></div><span style="font-size:7px;color:#aaa;width:32px;text-align:right;">34/28</span></div>
+    <div style="font-size:7.5px;color:#555;font-style:italic;margin:6px 0;">"Biggest gap: Conscientiousness (+15%)"</div>
+    <button class="btn bp">Relationship Insights →</button>
+    <span class="dest">→ goes to S20</span>
+    <button class="btn bg">Work Field Insights →</button>
+    <span class="dest">→ goes to S24</span>
+    <div class="nav">
+      <div class="ni">Home</div><div class="ni">Explore</div><div class="ni on">Compare</div><div class="ni">Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- S20 RELATIONSHIP INSIGHTS -->
+<div class="sc" style="left:840px;top:2202px;">
+  <div class="hd"><span class="t">Relationship Insights</span><span class="n">S20</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:5px;display:block;">← Back to Compare</a>
+    <div class="h1" style="font-size:10px;">You &amp; Sara</div>
+    <span class="lbl">Where You Align</span>
+    <div class="card" style="padding:7px;">
+      <div style="font-size:7.5px;color:#333;line-height:1.6;">Both score high in Openness (78/81) — you'll connect over ideas and creativity. Conversations won't run dry.</div>
+    </div>
+    <span class="lbl">Where Friction Lives</span>
+    <div class="card" style="padding:7px;">
+      <div style="font-size:7.5px;color:#555;line-height:1.6;">You C45 vs Sara C60. She structures tasks more tightly. Deadlines and plans may create tension.</div>
+    </div>
+    <div class="card" style="padding:7px;">
+      <div style="font-size:7.5px;color:#555;line-height:1.6;">You E62 vs Sara E44. You'll want more social time than she will. Respect her recharge needs.</div>
+    </div>
+    <span class="lbl">Communication Tip</span>
+    <div style="font-size:7.5px;color:#666;line-height:1.5;margin-bottom:8px;">Be upfront about timelines and commitments. Vague plans frustrate high-C people.</div>
+    <button class="btn bp">Share These Insights</button>
+    <span class="dest">→ native OS share sheet</span>
+    <div class="nav">
+      <div class="ni">Home</div><div class="ni">Explore</div><div class="ni on">Compare</div><div class="ni">Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- S21 CONTEXT SELECT -->
+<div class="sc" style="left:1180px;top:2202px;">
+  <div class="hd"><span class="t">Context Select</span><span class="n">S21</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:6px;display:block;">← Back to Home</a>
+    <div class="h1">Test Yourself in Context</div>
+    <div class="sub">Your personality shifts depending on context. See who you are at work vs in relationships — vs your base profile.</div>
+    <button class="btn bp" style="margin-top:8px;">Work You →</button>
+    <span class="dest">→ goes to S22 (work questions)</span>
+    <button class="btn bs">Relationship You →</button>
+    <span class="dest">→ goes to S22 (relationship questions)</span>
+    <div style="font-size:7px;color:#bbb;font-style:italic;margin-top:6px;line-height:1.5;">Results shown alongside your base profile. No result replaces another.</div>
+    <div class="nav">
+      <div class="ni on">Home</div><div class="ni">Explore</div><div class="ni">Compare</div><div class="ni">Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- S22 CONTEXT TEST -->
+<div class="sc" style="left:1440px;top:2202px;">
+  <div class="hd"><span class="t">Context Test</span><span class="n">S22</span></div>
+  <div class="bd">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <span style="font-size:9px;font-weight:700;">8 / 20</span>
+      <span class="chipd" style="font-size:6px;">WORK CONTEXT</span>
+    </div>
+    <div class="prog"><div class="pf" style="width:40%;"></div></div>
+    <div class="card">
+      <div style="font-size:8px;color:#444;line-height:1.5;margin-bottom:7px;">"At work, I prefer to have a detailed plan before starting a project."</div>
+      <div class="scale">
+        <div class="sd">1</div><div class="sd">2</div><div class="sd on">3</div><div class="sd">4</div><div class="sd">5</div>
+      </div>
+      <div class="slab"><span>Rarely</span><span>Almost Always</span></div>
+    </div>
+    <div style="font-size:7px;color:#aaa;font-style:italic;margin-bottom:6px;line-height:1.6;">
+      Sample Qs:<br>"I take charge in group work..."<br>"I prefer working alone..."<br>"I give feedback even if uncomfortable..."
+    </div>
+    <div style="display:flex;gap:5px;">
+      <button class="btn bg" style="flex:1;margin:0;">← Back</button>
+      <button class="btn bp" style="flex:1;margin:0;">Next →</button>
+    </div>
+    <span class="dest">→ On Q20: "Next →" becomes "Finish →" → S23</span>
+    <div class="ann">→ Context label changes (Work/Relationship)<br>→ Same UX as base test (S09)</div>
+  </div>
+</div>
+
+<!-- S23 CONTEXT RESULTS -->
+<div class="sc" style="left:1700px;top:2202px;">
+  <div class="hd"><span class="t">Context Results</span><span class="n">S23</span></div>
+  <div class="bd">
+    <div class="h1" style="font-size:10px;">Work Profile vs Base</div>
+    <div style="display:flex;gap:10px;font-size:7px;color:#888;margin-bottom:7px;"><span>■ Work</span><span style="color:#ccc;">▬ Base</span></div>
+    <div class="obs">
+      <div class="ob"><div class="obh"><span>O — Base 78 / Work 65</span></div><div class="obt"><div class="obf" style="width:65%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>C — Base 45 / Work 72</span></div><div class="obt"><div class="obf" style="width:72%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>E — Base 62 / Work 48</span></div><div class="obt"><div class="obf" style="width:48%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>A — Base 71 / Work 60</span></div><div class="obt"><div class="obf" style="width:60%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>N — Base 34 / Work 41</span></div><div class="obt"><div class="obf" style="width:41%;"></div></div></div>
+    </div>
+    <div style="font-size:7.5px;color:#555;font-style:italic;margin:6px 0;">"At work you're +27% more Conscientious and -14% less Extraverted."</div>
+    <button class="btn bp">See Work Field Insights →</button>
+    <span class="dest">→ goes to S24</span>
+    <button class="btn bg">Test Relationship Context</button>
+    <span class="dest">→ goes back to S22 (relationship variant)</span>
+    <a class="bln">Back to Home</a>
+    <span class="dest">→ goes to S16</span>
+  </div>
+</div>
+
+<!-- S24 WORK FIELDS -->
+<div class="sc" style="left:1960px;top:2202px;">
+  <div class="hd"><span class="t">Work Fields</span><span class="n">S24</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:5px;display:block;">← Back</a>
+    <div class="h1" style="font-size:10px;">How You'd Approach<br>Different Fields</div>
+    <div style="font-size:7px;color:#aaa;font-style:italic;margin-bottom:7px;">Approach &amp; style — not who performs better.</div>
+    <div class="fcrd">
+      <div class="fn">Design / Creative</div>
+      <div class="fb">O78 = high idea generation. Low C means execution needs external structure. Best in ideation-heavy roles.</div>
+    </div>
+    <div class="fcrd">
+      <div class="fn">Engineering / Technical</div>
+      <div class="fb">Work C72 shows you can apply structure when needed. Thrives in agile, defined environments.</div>
+    </div>
+    <div class="fcrd">
+      <div class="fn">Management / Leadership</div>
+      <div class="fb">A71 = consensus builder. Teams trust you. Collaborative by nature, not top-down.</div>
+    </div>
+    <div class="fcrd">
+      <div class="fn">Sales / Client-Facing</div>
+      <div class="fb">E62 gives you social energy without burnout. Can sustain client relationships long-term.</div>
+    </div>
+    <button class="btn bg" style="margin-top:4px;">Compare with someone in this field</button>
+    <span class="dest">→ goes to S17 Explore (filtered by field)</span>
+    <div class="nav">
+      <div class="ni on">Home</div><div class="ni">Explore</div><div class="ni">Compare</div><div class="ni">Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- S25 AI CHAT -->
+<div class="sc hl" style="left:60px;top:2742px;">
+  <div class="hd"><span class="t">AI Chat</span><span class="n">S25</span></div>
+  <div class="bd">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+      <span style="font-size:8px;font-weight:700;">AI · Your Profile</span>
+      <a class="bln" style="padding:0;font-size:7px;">← Home</a>
+    </div>
+    <div style="font-size:7px;color:#bbb;margin-bottom:8px;letter-spacing:.5px;">O78 C45 E62 A71 N34 · knows your scores</div>
+    <div class="bai">Hey Arslan. Based on your O78 and C45 — do you tend to start more projects than you finish?</div>
+    <div class="bu">Yes, honestly.</div>
+    <div class="bai">That's a trait pattern, not a character flaw. Your C45 means follow-through needs external structure. Want to talk about how to build that?</div>
+    <div style="font-size:7px;color:#aaa;margin-bottom:4px;margin-top:3px;">Suggested questions:</div>
+    <div>
+      <span class="chip" style="cursor:pointer;">Why do I get bored easily?</span>
+      <span class="chip" style="cursor:pointer;">How do I handle conflict?</span>
+      <span class="chip" style="cursor:pointer;">What careers suit me?</span>
+    </div>
+    <div class="cf">
+      <div class="cfi">Type a message...</div>
+      <div class="cfs">→</div>
+    </div>
+    <div class="ann">→ Tap chip → auto-fills input → sends<br>→ AI tailored to exact OCEAN scores<br>→ Chat history saved per user session</div>
+  </div>
+</div>
+
+<!-- S26 MY PROFILE -->
+<div class="sc" style="left:320px;top:2742px;">
+  <div class="hd"><span class="t">My Profile</span><span class="n">S26</span></div>
+  <div class="bd">
+    <div style="text-align:center;margin-bottom:8px;">
+      <div class="av-lg"></div>
+      <div style="font-size:10px;font-weight:700;">Arslan Ahmed <span style="font-weight:400;color:#aaa;font-size:9px;">✎ Edit</span></div>
+      <div style="font-size:7px;color:#aaa;margin-top:2px;">Member since Jan 2026</div>
+    </div>
+    <div class="obs">
+      <div class="ob"><div class="obh"><span>O</span><span>78%</span></div><div class="obt"><div class="obf" style="width:78%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>C</span><span>45%</span></div><div class="obt"><div class="obf" style="width:45%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>E</span><span>62%</span></div><div class="obt"><div class="obf" style="width:62%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>A</span><span>71%</span></div><div class="obt"><div class="obf" style="width:71%;"></div></div></div>
+      <div class="ob"><div class="obh"><span>N</span><span>34%</span></div><div class="obt"><div class="obf" style="width:34%;"></div></div></div>
+    </div>
+    <button class="btn bg" style="margin-bottom:3px;">View Full Results →</button>
+    <span class="dest">→ goes to S12 Results</span>
+    <div class="hr"></div>
+    <div class="trow"><span>Last test: Jun 6, 2026</span></div>
+    <div class="trow"><span>Next test: Sep 6, 2026</span></div>
+    <button class="btn bg" style="margin-bottom:3px;">View Drift History →</button>
+    <span class="dest">→ goes to S27</span>
+    <button class="btn bg" style="margin-bottom:3px;">Privacy Settings →</button>
+    <span class="dest">→ goes to S28</span>
+    <button class="btn bg" style="margin-bottom:3px;">Notifications →</button>
+    <span class="dest">→ goes to S29</span>
+    <a class="bln" style="color:#c0392b;margin-top:4px;">Log Out</a>
+    <span class="dest">→ confirmation modal → clears session</span>
+    <div class="nav">
+      <div class="ni">Home</div><div class="ni">Explore</div><div class="ni">Compare</div><div class="ni on">Profile</div>
+    </div>
+  </div>
+</div>
+
+<!-- S27 DRIFT HISTORY -->
+<div class="sc" style="left:580px;top:2742px;">
+  <div class="hd"><span class="t">Drift History</span><span class="n">S27</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:6px;display:block;">← Back to Profile</a>
+    <div class="h1">Your OCEAN Over Time</div>
+    <div class="lchart">
+      <svg width="100%" height="40" style="position:absolute;top:0;left:0;">
+        <polyline points="5,26 72,20 145,10" stroke="#1a1a1a" stroke-width="1.5" fill="none"/>
+        <polyline points="5,12 72,20 145,22" stroke="#ccc" stroke-width="1.5" fill="none" stroke-dasharray="3,2"/>
+        <circle cx="5" cy="26" r="2.5" fill="#1a1a1a"/>
+        <circle cx="72" cy="20" r="2.5" fill="#1a1a1a"/>
+        <circle cx="145" cy="10" r="2.5" fill="#1a1a1a"/>
+      </svg>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:6px;color:#bbb;margin-bottom:7px;">
+      <span>Dec '25</span><span>Mar '26</span><span>Jun '26</span>
+    </div>
+    <div style="font-size:7px;color:#aaa;margin-bottom:4px;">━ Openness &nbsp;&nbsp; ╌ Neuroticism</div>
+    <span class="lbl">What Shifted</span>
+    <div style="font-size:7.5px;color:#333;line-height:1.8;">
+      ↑ Openness +6 over 6 months<br>
+      ↓ Neuroticism −8 over 6 months<br>
+      → Conscientiousness +5 (steady)
+    </div>
+    <div style="font-size:7.5px;color:#555;font-style:italic;margin-top:6px;margin-bottom:8px;">"Your emotional stability is improving."</div>
+    <button class="btn bp">Take Test Now →</button>
+    <span class="dest">→ goes to S07 Test Intro</span>
+    <div class="ann">→ Needs min 2 tests to show drift<br>→ Each dot = one completed test</div>
+  </div>
+</div>
+
+<!-- S28 PRIVACY SETTINGS -->
+<div class="sc" style="left:840px;top:2742px;">
+  <div class="hd"><span class="t">Privacy</span><span class="n">S28</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:7px;display:block;">← Back to Profile</a>
+    <div class="h2">Privacy Settings</div>
+    <div class="hr"></div>
+    <div class="trow"><span>Public profile</span><div class="sw"></div></div>
+    <div class="trow"><span>Show OCEAN scores publicly</span><div class="sw"></div></div>
+    <div class="trow"><span>Allow comparisons from strangers</span><div class="sw off"></div></div>
+    <div class="trow"><span>Show me in Explore</span><div class="sw"></div></div>
+    <div class="trow"><span>Show drift history publicly</span><div class="sw off"></div></div>
+    <span class="lbl">Who can compare with me</span>
+    <div class="ro on">Everyone</div>
+    <div class="ro">Only mutual connections</div>
+    <div class="ro">Nobody</div>
+    <div class="hr"></div>
+    <a class="bln">Export my data (JSON download)</a>
+    <span class="dest">→ triggers file download</span>
+    <a class="bln" style="color:#c0392b;">Delete all my data</a>
+    <span class="dest">→ opens confirmation modal</span>
+    <button class="btn bp" style="margin-top:7px;">Save Changes</button>
+    <span class="dest">→ saves, stays on this screen</span>
+  </div>
+</div>
+
+<!-- S29 NOTIFICATIONS -->
+<div class="sc" style="left:1100px;top:2742px;">
+  <div class="hd"><span class="t">Notifications</span><span class="n">S29</span></div>
+  <div class="bd">
+    <a class="bln" style="text-align:left;padding:0;margin-bottom:7px;display:block;">← Back to Profile</a>
+    <div class="h2">Notification Settings</div>
+    <div class="hr"></div>
+    <div class="trow"><span>Drift tracking reminders</span><div class="sw"></div></div>
+    <div class="trow"><span>Someone compared with me</span><div class="sw"></div></div>
+    <div class="trow"><span>New insights available</span><div class="sw"></div></div>
+    <div class="trow"><span>App updates &amp; announcements</span><div class="sw off"></div></div>
+    <div class="hr"></div>
+    <span class="lbl">Reminder Frequency</span>
+    <div class="ro on">Every 90 days</div>
+    <div class="ro">Every 6 months</div>
+    <div class="ro">Set a custom date</div>
+    <span class="lbl">Custom date (if selected above)</span>
+    <div class="inp">Pick a date...</div>
+    <button class="btn bp" style="margin-top:8px;">Save</button>
+    <span class="dest">→ saves + returns to S26</span>
+    <div class="ann">→ Push notification OS permission<br>required — prompted on first toggle ON</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════ LEGEND ══════════════════════════ -->
+<div style="position:absolute;bottom:50px;left:60px;display:flex;flex-wrap:wrap;gap:22px;align-items:center;padding:12px 16px;background:rgba(255,255,255,.7);border-radius:6px;border:1px solid #ddd;">
+  <span style="font-size:8px;color:#aaa;letter-spacing:2px;text-transform:uppercase;">Legend</span>
+  <span style="display:flex;align-items:center;gap:6px;font-size:8px;color:#888;">
+    <svg width="24" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#888" stroke-width="1.5"/><polygon points="14,2 20,5 14,8 15.5,5" fill="#888"/></svg>
+    Primary navigation
+  </span>
+  <span style="display:flex;align-items:center;gap:6px;font-size:8px;color:#888;">
+    <svg width="24" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#555" stroke-width="1.5" stroke-dasharray="5,3"/><polygon points="14,2 20,5 14,8 15.5,5" fill="#555"/></svg>
+    Branch from Home
+  </span>
+  <span style="display:flex;align-items:center;gap:6px;font-size:8px;color:#aaa;">
+    <svg width="24" height="10"><line x1="0" y1="5" x2="20" y2="5" stroke="#bbb" stroke-width="1" stroke-dasharray="3,3"/><polygon points="14,2 20,5 14,8 15.5,5" fill="#bbb"/></svg>
+    Secondary / return
+  </span>
+  <span style="display:flex;align-items:center;gap:6px;font-size:8px;color:#aaa;">
+    <div style="width:14px;height:14px;border:2px solid #1a1a1a;border-radius:3px;"></div>
+    Key screen
+  </span>
+  <span style="display:flex;align-items:center;gap:6px;font-size:8px;color:#aaa;">
+    <div style="width:14px;height:14px;border:1.5px solid #c5bfb8;border-radius:3px;"></div>
+    Supporting screen
+  </span>
+</div>
+
+<!-- ══════════════════════════ HEADER ══════════════════════════ -->
+<div style="position:absolute;top:18px;left:60px;">
+  <span style="font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#999;">OCEAN App · Full Flow Wireframe · 29 Screens</span>
+</div>
+
+</div>
+</body>
+</html>

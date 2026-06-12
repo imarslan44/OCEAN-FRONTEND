@@ -1,0 +1,352 @@
+[
+  {
+    "id": "q1",
+    "text": "I enjoy thinking about new ideas and concepts.",
+    "trait": "O",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q2",
+    "text": "I like visiting art galleries or museums.",
+    "trait": "O",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q3",
+    "text": "I prefer following a familiar routine rather than trying new things.",
+    "trait": "O",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q4",
+    "text": "I have a vivid imagination.",
+    "trait": "O",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q5",
+    "text": "I am not interested in abstract or philosophical discussions.",
+    "trait": "O",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q6",
+    "text": "I enjoy exploring creative ways to solve problems.",
+    "trait": "O",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q7",
+    "text": "I prefer practical facts over theoretical ideas.",
+    "trait": "O",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q8",
+    "text": "I enjoy learning about different cultures and perspectives.",
+    "trait": "O",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q9",
+    "text": "I rarely spend time daydreaming or reflecting on life.",
+    "trait": "O",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q10",
+    "text": "I appreciate beauty in art, music, or nature.",
+    "trait": "O",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q11",
+    "text": "I keep my workspace neat and organized.",
+    "trait": "C",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q12",
+    "text": "I often make decisions on impulse without planning ahead.",
+    "trait": "C",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q13",
+    "text": "I pay attention to small details in my work.",
+    "trait": "C",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q14",
+    "text": "I find it difficult to stick to a schedule.",
+    "trait": "C",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q15",
+    "text": "I always finish the tasks that I start.",
+    "trait": "C",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q16",
+    "text": "I sometimes procrastinate or delay doing important work.",
+    "trait": "C",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q17",
+    "text": "I set clear goals for myself and work hard to achieve them.",
+    "trait": "C",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q18",
+    "text": "I am often careless and make mistakes.",
+    "trait": "C",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q19",
+    "text": "I show up on time for appointments and meetings.",
+    "trait": "C",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q20",
+    "text": "I like to think carefully before I speak or act.",
+    "trait": "C",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q21",
+    "text": "I feel energized after spending time with a group of people.",
+    "trait": "E",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q22",
+    "text": "I prefer to spend my free time alone or in quiet settings.",
+    "trait": "E",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q23",
+    "text": "I find it easy to start conversations with strangers.",
+    "trait": "E",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q24",
+    "text": "I tend to keep my thoughts and feelings to myself.",
+    "trait": "E",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q25",
+    "text": "I love being the center of attention in a social gathering.",
+    "trait": "E",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q26",
+    "text": "I am quiet and reserved around people I do not know well.",
+    "trait": "E",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q27",
+    "text": "I actively seek out social events and parties.",
+    "trait": "E",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q28",
+    "text": "I find large social gatherings draining.",
+    "trait": "E",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q29",
+    "text": "I make friends quickly and easily.",
+    "trait": "E",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q30",
+    "text": "I talk a lot when I am with friends.",
+    "trait": "E",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q31",
+    "text": "I make an effort to help others when they are in need.",
+    "trait": "A",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q32",
+    "text": "I sometimes insult or speak harshly to other people.",
+    "trait": "A",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q33",
+    "text": "I try to understand and sympathize with others' feelings.",
+    "trait": "A",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q34",
+    "text": "I believe that most people have good intentions.",
+    "trait": "A",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q35",
+    "text": "I find it hard to forgive people who have wronged me.",
+    "trait": "A",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q36",
+    "text": "I am a good listener and show interest in other people's lives.",
+    "trait": "A",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q37",
+    "text": "I often get into arguments or disputes with others.",
+    "trait": "A",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q38",
+    "text": "I put other people's needs before my own.",
+    "trait": "A",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q39",
+    "text": "I don't really care about other people's problems.",
+    "trait": "A",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q40",
+    "text": "I treat everyone I meet with kindness and respect.",
+    "trait": "A",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q41",
+    "text": "I get stressed or overwhelmed easily.",
+    "trait": "N",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q42",
+    "text": "I feel calm and relaxed even under pressure.",
+    "trait": "N",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q43",
+    "text": "I worry frequently about things that might go wrong.",
+    "trait": "N",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q44",
+    "text": "I experience frequent mood swings.",
+    "trait": "N",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q45",
+    "text": "I rarely feel sad, blue, or depressed.",
+    "trait": "N",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q46",
+    "text": "I get irritated or frustrated very quickly.",
+    "trait": "N",
+    "direction": 1,
+    "shortTest": true
+  },
+  {
+    "id": "q47",
+    "text": "I feel comfortable with who I am.",
+    "trait": "N",
+    "direction": -1,
+    "shortTest": false
+  },
+  {
+    "id": "q48",
+    "text": "I often feel insecure or self-conscious.",
+    "trait": "N",
+    "direction": 1,
+    "shortTest": false
+  },
+  {
+    "id": "q49",
+    "text": "I find it easy to bounce back after a setback.",
+    "trait": "N",
+    "direction": -1,
+    "shortTest": true
+  },
+  {
+    "id": "q50",
+    "text": "I am easily bothered or upset by small things.",
+    "trait": "N",
+    "direction": 1,
+    "shortTest": false
+  }
+]

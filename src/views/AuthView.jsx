@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import { useAuth } from '../context/AuthContext';
@@ -14,16 +14,120 @@ export default function AuthView() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
+  // Add effect to handle existing token on load
+  useEffect(() => {
+    const token = localStorage.getItem('ocean_token');
+    if (token) {
+      (async () => {
+        try {
+          // 1. Check profile
+          const profileRes = await fetch('/api/v1/users/profile', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          let hasProfile = false;
+          if (profileRes.ok) {
+            try {
+              const profileData = await profileRes.json();
+              hasProfile = !!profileData?.profile;
+            } catch { /* empty body */ }
+          }
 
-  const handleSubmit = (e) => {
+          // 2. Check in-progress test
+          const inProgressRes = await fetch('/api/v1/tests/in-progress', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          let inProgressData = null;
+          if (inProgressRes.ok) {
+            try {
+              inProgressData = await inProgressRes.json();
+            } catch { /* empty body */ }
+          }
+
+          // 3. Check completed test
+          const completedRes = await fetch('/api/v1/tests/completed', {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          let hasCompleted = false;
+          if (completedRes.ok) {
+            try {
+              const completedData = await completedRes.json();
+              hasCompleted = !!completedData;
+            } catch { /* empty body */ }
+          }
+
+          if (hasCompleted) {
+            navigate('/dashboard');
+          } else if (inProgressData) {
+            navigate('/test-resume');
+          } else if (hasProfile) {
+            navigate('/test-intro');
+          } else {
+            navigate('/profile/setup');
+          }
+        } catch (e) {
+          console.error('Auto-redirect failed:', e);
+          // Token may be invalid — stay on auth page
+        }
+      })();
+    }
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
       if (activeTab === 'signup') {
-        signup(name || 'New User', email || 'user@example.com', password || 'password');
+        await signup(name, email, password);
       } else {
-        login(email || 'user@example.com', password || 'password');
+        await login(email, password);
       }
-      navigate('/profile/setup');
+
+      const token = localStorage.getItem('ocean_token');
+
+      // 1. Check profile
+      const profileRes = await fetch('/api/v1/users/profile', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let hasProfile = false;
+      if (profileRes.ok) {
+        try {
+          const profileData = await profileRes.json();
+          hasProfile = !!profileData?.profile;
+        } catch { /* empty body */ }
+      }
+
+      // 2. Check in-progress test
+      const inProgressRes = await fetch('/api/v1/tests/in-progress', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let inProgressData = null;
+      if (inProgressRes.ok) {
+        try {
+          inProgressData = await inProgressRes.json();
+        } catch { /* empty body */ }
+      }
+
+      // 3. Check completed test
+      const completedRes = await fetch('/api/v1/tests/completed', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      let hasCompleted = false;
+      if (completedRes.ok) {
+        try {
+          const completedData = await completedRes.json();
+          hasCompleted = !!completedData;
+        } catch { /* empty body */ }
+      }
+
+      if (hasCompleted) {
+        navigate('/dashboard');
+      } else if (inProgressData) {
+        navigate('/test-resume');
+      } else if (hasProfile) {
+        navigate('/test-intro');
+      } else {
+        navigate('/profile/setup');
+      }
     } catch (err) {
       setError(err.message || 'Authentication failed');
     }

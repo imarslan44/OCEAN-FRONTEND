@@ -116,21 +116,28 @@ export default function AuthView() {
         try {
           const completedData = await completedRes.json();
           hasCompleted = !!completedData;
-        } catch { /* empty body */ }
+
+        }catch(err){
+          console.log(err);
+        }
       }
 
-      if (hasCompleted) {
-        navigate('/dashboard');
-      } else if (inProgressData) {
-        navigate('/test-resume');
-      } else if (hasProfile) {
-        navigate('/test-intro');
-      } else {
-        navigate('/profile/setup');
-      }
-    } catch (err) {
-      setError(err.message || 'Authentication failed');
-    }
+        // Add a small delay to ensure all backend operations complete
+      const redirectTimer = setTimeout(() => {
+        if (hasCompleted) {
+          navigate('/dashboard');
+        } else if (inProgressData) {
+          navigate('/test-resume');
+        } else if (hasProfile) {
+          navigate('/test-intro');
+        } else {
+          navigate('/profile/setup');
+        }
+      }, 100);
+  
+  } catch (err) {
+    setError(err.message || 'Authentication failed');
+  }
   };
 
   return (

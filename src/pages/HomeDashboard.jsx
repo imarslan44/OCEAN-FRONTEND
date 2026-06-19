@@ -14,8 +14,14 @@ export default function HomeDashboard() {
     return () => clearTimeout(timer);
   }, []);
 
-  const scores = user?.profile?.personalityResult?.scores || { O: 0, C: 0, E: 0, A: 0, N: 0 };
-  const archetypeTitle = user?.profile?.personalityResult?.archetype?.title || 'Unknown';
+  const scores = user?.profile?.personalityResult ? {
+    O: user.profile.personalityResult.openness || 0,
+    C: user.profile.personalityResult.conscientiousness || 0,
+    E: user.profile.personalityResult.extraversion || 0,
+    A: user.profile.personalityResult.agreeableness || 0,
+    N: user.profile.personalityResult.neuroticism || 0
+  } : { O: 0, C: 0, E: 0, A: 0, N: 0 };
+  const archetypeTitle = user?.profile?.personalityResult?.personalityType || 'Unknown';
   
   return (
     <div className="bg-background min-h-screen pb-24 font-body-md text-on-background">

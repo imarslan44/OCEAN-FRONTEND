@@ -13,6 +13,7 @@ export default function HomeDashboard() {
     }, 200);
     return () => clearTimeout(timer);
   }, []);
+  
 
   const scores = user?.profile?.personalityResult ? {
     O: user.profile.personalityResult.openness || 0,
@@ -34,13 +35,13 @@ export default function HomeDashboard() {
           </div>
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors">notifications</span>
-            <div className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline/10 cursor-pointer">
+            <Link to="/profile" className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline/10 cursor-pointer">
               <img 
                 alt="Profile" 
                 className="w-full h-full object-cover" 
                 src={user?.profile?.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuA8VuXlM7MElcwFl-O4wIJnYJbONCtYFRKfkbNCN--H-QaRZEa34Tv-5FuCgR505YjWRzVwaACJxfBLyA8bluOvNzrhqSFZH2Xw330XR7X0T_jgRIx4ceThrAnukS9QItfox2cUSgGcPsGv98JLRJdGSqVCB1ReJvjqB7CmQnMCPNRge4o_uWAHcMbZlE8fmKEOSHzl-HurD7W7ONXhuQ28zJT2dD3YGwEnmh-9IFIuxisO3LjBcjSu9UUUO8zVVKarpXdbVdXtdRM"}
               />
-            </div>
+            </Link>
           </div>
         </div>
       </header>
@@ -61,39 +62,43 @@ export default function HomeDashboard() {
         </section>
 
         {/* OCEAN Summary Card */}
-        <section className="bg-surface-container-lowest p-gutter rounded-xl border border-primary/10 transition-all hover:border-primary/20 shadow-sm cursor-pointer group" onClick={() => navigate('/results', { state: { calculation: user?.profile?.personalityResult } })}>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md">
-            <div className="space-y-unit flex-1">
+        <section className="bg-surface-container-lowest p-gutter rounded-xl border border-primary/10 transition-all hover:border-primary/20 shadow-sm cursor-pointer group" onClick={() => navigate('/results')}>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md relative ">
+           
+            <div className="space-y-unit w-25% ">
               <h3 className="font-headline-md text-headline-md font-bold">Your Profile</h3>
               <p className="font-body-md text-body-md text-on-surface-variant max-w-md mt-2">
                 Archetype: {archetypeTitle}
               </p>
-              <button className="mt-4 font-label-sm text-label-sm text-secondary flex items-center gap-1 group font-bold transition-all">
+              <button className="mt-4 max-sm:absolute -right-12 -top-4 text-nowrap  w-[75%] font-label-sm text-label-sm text-secondary flex items-center gap-1 group font-bold transition-all">
                 View Detailed Report 
                 <span className="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
               </button>
+              
             </div>
             
-            {/* Mini Vertical Bar Chart */}
-            <div className="flex items-end gap-3 h-32 px-4 border-l border-outline/10">
-              {[
-                { label: 'O', val: scores.O, active: true },
-                { label: 'C', val: scores.C, active: true },
-                { label: 'E', val: scores.E, active: false },
-                { label: 'A', val: scores.A, active: true },
-                { label: 'N', val: scores.N, active: false },
-              ].map((trait, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-2">
-                  <div className="h-24 w-4 bg-surface-container-high rounded-t-sm overflow-hidden flex flex-col justify-end">
-                    <div 
-                      className={`w-full bg-primary rounded-t-sm ${!trait.active ? 'opacity-40' : ''} transition-all duration-1000 ease-out`}
-                      style={{ height: animate ? `${trait.val || 5}%` : '0%' }}
-                    ></div>
-                  </div>
-                  <span className="font-label-sm text-[10px] font-bold">{trait.label}</span>
-                </div>
-              ))}
-            </div>
+              
+            
+{/* Mini Vertical Bar Chart */}
+             <div className="flex items-end gap-4 h-32 px-4 border-l border-outline/10">
+               {[
+                 { label: 'O', val: scores.O, active: true },
+                 { label: 'C', val: scores.C, active: true },
+                 { label: 'E', val: scores.E, active: false },
+                 { label: 'A', val: scores.A, active: true },
+                 { label: 'N', val: scores.N, active: false },
+               ].map((trait, idx) => (
+                 <div key={idx} className="flex flex-col items-center gap-2">
+                   <div className="h-24 w-11 bg-surface-container-high rounded-t-sm overflow-hidden flex flex-col justify-end">
+                     <div 
+                       className={`w-full bg-primary rounded-t-sm ${!trait.active ? 'opacity-40' : ''} transition-all duration-1000 ease-out`}
+                       style={{ height: animate ? `${trait.val || 5}%` : '0%' }}
+                     ></div>
+                   </div>
+                   <span className="font-label-sm text-[11px] font-bold">{trait.label}</span>
+                 </div>
+               ))}
+             </div>
           </div>
         </section>
 

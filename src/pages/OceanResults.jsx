@@ -1,61 +1,67 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export default function OceanResults() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, loading: authLoading } = useAuth();
   const [animate, setAnimate] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [calcData, setCalcData] = useState(location.state?.calculation || null);
 
-  // If no router state, fetch from backend
+  // Start animation when calcData is ready
   useEffect(() => {
     if (calcData) {
-      setLoading(false);
       const timer = setTimeout(() => setAnimate(true), 100);
       return () => clearTimeout(timer);
     }
+  }, [calcData]);
 
-    // No router state — fetch latest completed test
+  // Fetch from backend if no route state (wait for auth to initialize)
+  useEffect(() => {
+    if (calcData) return;
+
+    // Wait for auth to finish initializing
+    if (authLoading) return;
+
     const fetchResults = async () => {
+      const token = user?.token || localStorage.getItem('ocean_token');
+      if (!token) {
+        navigate('/auth');
+        return;
+      }
       try {
-        const token = localStorage.getItem('ocean_token');
-        if (!token) {
-          navigate('/auth');
-          return;
-        }
         const res = await fetch('/api/v1/tests/completed', {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         if (!res.ok) {
-          navigate('/dashboard');
+          if (res.status === 401) {
+            navigate('/auth');
+          } else {
+            // No completed test found or other server error
+            navigate('/test-intro');
+          }
           return;
         }
         const data = await res.json();
-        if (data.calculation) {
-          setCalcData(data.calculation);
+        const result = data.calculation || (data.scores ? data : null);
+        if (result) {
+          setCalcData(result);
         } else {
-          navigate('/dashboard');
+          navigate('/test-intro');
         }
       } catch (e) {
         console.error('Failed to fetch results:', e);
         navigate('/dashboard');
-      } finally {
-        setLoading(false);
       }
     };
     fetchResults();
-  }, [calcData, navigate]);
+  }, [calcData, navigate, authLoading, user]);
 
-  // Trigger bar animation after data loads
-  useEffect(() => {
-    if (calcData && !loading) {
-      const timer = setTimeout(() => setAnimate(true), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [calcData, loading]);
+  // Loading state: true while auth is loading or no calcData yet
+  const isLoading = authLoading || !calcData;
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="bg-background min-h-screen flex items-center justify-center">
         <span className="material-symbols-outlined animate-spin text-primary text-[48px]">progress_activity</span>

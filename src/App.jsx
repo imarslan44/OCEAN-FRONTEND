@@ -7,6 +7,7 @@ import Onboarding2View from './views/Onboarding2View';
 import Onboarding3View from './views/Onboarding3View';
 import AuthView from './views/AuthView';
 import ProfileSetup from './pages/ProfileSetup';
+import ProfilePage from './pages/ProfilePage';
 import TestIntro from './pages/TestIntro';
 import TestQuestions from './pages/TestQuestions';
 import CalculatingProfile from './pages/CalculatingProfile';
@@ -52,6 +53,7 @@ export default function App() {
         <Route path="/reveal" element={<RevealProfile />} />
         <Route path="/results" element={<OceanResults />} />
         <Route path="/dashboard" element={<HomeDashboard />} />
+        <Route path="/profile" element={<ProfilePage />} />
         {/* fallback to splash for unknown routes */}
         <Route path="*" element={<Navigate to="/splash" replace />} />
       </Routes>

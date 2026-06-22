@@ -1,9 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/Button';
 
-const AGE_RANGES = ['16–20', '21–25', '26–30', '31–35', '36–40', '41–50', '51+'];
+
+
+ const AGE_RANGES = ['16–20', '21–25', '26–30', '31–35', '36–40', '41–50',];
+
 
 const GOALS = [
   { id: 'self', label: 'Self-understanding' },
@@ -14,7 +17,8 @@ const GOALS = [
 ];
 
 export default function ProfilePage() {
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, logout } = useAuth();
+  const navigate = useNavigate();
   const [editMode, setEditMode] = useState(false);
   const [animateChart, setAnimateChart] = useState(false);
   const fileInputRef = useRef(null);
@@ -144,6 +148,9 @@ export default function ProfilePage() {
                   alt="Avatar"
                   className="w-full h-full object-cover"
                 />
+
+
+
               </div>
               <h1 className="font-headline-md text-headline-md text-on-surface font-bold">{user?.username || 'Guest'}</h1>
               <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold mt-2 ${formState.isPublic ? 'bg-primary-container text-on-primary-container' : 'bg-surface-container-high text-on-surface-variant'}`}>
@@ -308,7 +315,7 @@ export default function ProfilePage() {
                   </p>
                 </div>
                 <button type="button" onClick={() => setFormState({ ...formState, isPublic: !formState.isPublic })} className={`relative w-12 h-6 rounded-full transition-all ${formState.isPublic ? 'bg-primary' : 'bg-surface-container-highest'}`}>
-                  <span className={`absolute top-0.5 w-5 h-5 bg-on-primary rounded-full transition-transform ${formState.isPublic ? 'translate-x-6' : 'translate-x-0.5'}`}></span>
+                  <span className={`absolute top-0.5 w-5 h-5  left-0 bg-on-primary rounded-full transition-transform ${formState.isPublic ? 'translate-x-6' : 'translate-x-0.5'}`}></span>
                 </button>
               </div>
             </div>
@@ -320,6 +327,20 @@ export default function ProfilePage() {
           </div>
         )}
       </main>
+
+      {/* Logout control (end of profile page) */}
+      <div className="max-w-container-max mx-auto px-margin-mobile mt-6 mb-20">
+        <button
+          type="button"
+          onClick={async () => {
+            await logout();
+            navigate('/auth');
+          }}
+          className="w-full md:w-auto block ml-auto md:ml-0 px-6 py-3 rounded-lg border border-outline/variant bg-surface-container-low text-on-surface hover:border-primary/50 hover:bg-surface-container-low transition-all active:scale-95 cursor-pointer"
+        >
+          Logout
+        </button>
+      </div>
 
       <nav className="fixed bottom-0 w-full z-50 border-t border-outline/10 bg-surface h-16 flex justify-around items-center px-4">
         <Link to="/dashboard" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">

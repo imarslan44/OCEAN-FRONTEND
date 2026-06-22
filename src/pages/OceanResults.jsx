@@ -1,26 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function OceanResults() {
   const navigate = useNavigate();
-  const location = useLocation();
   const { user, loading: authLoading } = useAuth();
   const [animate, setAnimate] = useState(false);
-  const [calcData, setCalcData] = useState(location.state?.calculation || null);
+  const [calcData, setCalcData] = useState(null);
 
-  // Start animation when calcData is ready
+  // Fetch from backend (source of truth for calculations)
   useEffect(() => {
-    if (calcData) {
-      const timer = setTimeout(() => setAnimate(true), 100);
-      return () => clearTimeout(timer);
-    }
-  }, [calcData]);
-
-  // Fetch from backend if no route state (wait for auth to initialize)
-  useEffect(() => {
-    if (calcData) return;
-
     // Wait for auth to finish initializing
     if (authLoading) return;
 
@@ -44,9 +33,8 @@ export default function OceanResults() {
           return;
         }
         const data = await res.json();
-        const result = data.calculation || (data.scores ? data : null);
-        if (result) {
-          setCalcData(result);
+        if (data?.calculation) {
+          setCalcData(data.calculation);
         } else {
           navigate('/test-intro');
         }
@@ -55,8 +43,16 @@ export default function OceanResults() {
         navigate('/dashboard');
       }
     };
+
     fetchResults();
-  }, [calcData, navigate, authLoading, user]);
+  }, [navigate, authLoading, user]);
+
+  // Start animation when calcData is ready
+  useEffect(() => {
+    if (!calcData) return;
+    const timer = setTimeout(() => setAnimate(true), 100);
+    return () => clearTimeout(timer);
+  }, [calcData]);
 
   // Loading state: true while auth is loading or no calcData yet
   const isLoading = authLoading || !calcData;

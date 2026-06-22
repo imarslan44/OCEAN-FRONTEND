@@ -43,17 +43,33 @@ export default function TestResume() {
   return (
     <div className="bg-background min-h-screen flex flex-col items-center px-margin-mobile pt-24">
       <Card className="w-full max-w-md p-gutter md:p-stack-lg">
-        <h1 className="font-headline-md text-headline-md mb-4 text-center">Resume Test</h1>
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={() => navigate('/test-intro')}
+            className="material-symbols-outlined text-primary !text-[24px] cursor-pointer hover:opacity-70"
+            aria-label="Back to test intro"
+            type="button"
+          >
+            close
+          </button>
+          <h1 className="font-headline-md text-headline-md text-center flex-1">Resume Test</h1>
+          <div className="w-6" />
+        </div>
+
         <p className="font-body-md text-body-md text-on-surface-variant mb-6 text-center">
           You have a test in progress. Would you like to continue where you left off or start a new test?
         </p>
+
         <div className="flex flex-col gap-4">
           {hasInProgress && (
             <Button variant="primary" onClick={() => navigate('/test')}>Resume Test</Button>
           )}
           <Button variant="secondary" onClick={() => navigate('/test-intro')}>Start New Test</Button>
+
+
         </div>
       </Card>
+
     </div>
   );
 }

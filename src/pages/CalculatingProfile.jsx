@@ -120,9 +120,9 @@ export default function CalculatingProfile() {
   useEffect(() => {
     if (progress === 100) {
       if (apiResult) {
-        // Stagger exit slightly for visual satisfaction
+        // Backend holds calculations; frontend only animates then navigates.
         const timer = setTimeout(() => {
-          navigate('/reveal', { state: { calculation: apiResult } });
+          navigate('/reveal');
         }, 500);
         return () => clearTimeout(timer);
       } else if (apiError) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
@@ -14,8 +14,35 @@ const TRAITS = [
 
 const TestIntro = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [expandedTrait, setExpandedTrait] = useState(null);
+  const [hasInProgress, setHasInProgress] = useState(false);
+  const [authMenuOpen, setAuthMenuOpen] = useState(false);
+
+
+  useEffect(() => {
+    const fetchInProgress = async () => {
+      try {
+        const token = user?.token || localStorage.getItem('ocean_token');
+        if (!token) {
+          setHasInProgress(false);
+          return;
+        }
+
+        const res = await fetch('/api/v1/tests/in-progress', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        // 200 => has in-progress, 404 => none
+        setHasInProgress(res.ok);
+      } catch (e) {
+        console.error('Failed to check in-progress test:', e);
+        setHasInProgress(false);
+      }
+    };
+
+    fetchInProgress();
+  }, [user]);
 
   // Determine question count — shortTest only has questions where shortTest = true
   const totalQuestions = 50;
@@ -32,13 +59,65 @@ const TestIntro = () => {
               OCEAN
             </span>
           </div>
-          <button 
-            onClick={() => navigate('/profile-setup')}
-            className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-3 cursor-pointer flex items-center gap-1"
-          >
-            <span className="material-symbols-outlined !text-[16px]">arrow_back</span>
-            Back
-          </button>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate('/profile-setup')}
+              className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-3 cursor-pointer flex items-center gap-1"
+            >
+              <span className="material-symbols-outlined !text-[16px]">arrow_back</span>
+              Back
+            </button>
+
+            {/* Auth control (Login / Name + Logout dropdown) */}
+            <div className="relative">
+              {!user?.token && (
+                <button
+                  onClick={() => navigate('/auth')}
+                  className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-3 cursor-pointer"
+                >
+                  Login
+                </button>
+              )}
+
+              {user?.token && (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setAuthMenuOpen((v) => !v)}
+                    className="flex items-center gap-2 font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-3 cursor-pointer"
+                    aria-haspopup="menu"
+                    aria-expanded={authMenuOpen}
+                  >
+                    <span className="material-symbols-outlined !text-[18px] text-outline">account_circle</span>
+                    {user?.username || 'Account'}
+                    <span className="material-symbols-outlined !text-[18px] text-outline">expand_more</span>
+                  </button>
+
+                  {authMenuOpen && (
+                    <div
+                      className="absolute right-0 mt-2 w-44 bg-surface border border-outline/10 rounded-xl shadow-lg z-50"
+                      role="menu"
+                    >
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          setAuthMenuOpen(false);
+                          await logout();
+                          navigate('/auth');
+                        }}
+                        className="w-full text-left px-4 py-3 text-on-surface hover:bg-surface-container-low rounded-xl"
+                        role="menuitem"
+                      >
+                        <span className="material-symbols-outlined !text-[18px] mr-2 align-middle">logout</span>
+                        Logout
+                      </button>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
         </div>
       </header>
 
@@ -105,14 +184,39 @@ const TestIntro = () => {
             {/* CTA */}
             <div className="flex items-center gap-3">
               <Button
-                variant="primary"
-                onClick={() => navigate('/test')}
-                icon="play_arrow"
+                variant={hasInProgress ? 'secondary' : 'primary'}
+                onClick={() => {
+                  // If not logged in, send to signup/login (auth) first.
+                  if (!user?.token) {
+                    navigate('/auth');
+                    return;
+                  }
+                  navigate('/test-resume');
+                }}
+                icon={hasInProgress ? 'restore' : 'play_arrow'}
                 className="px-10"
               >
-                Begin Test
+                {hasInProgress ? 'Resume Test' : 'Begin Test'}
               </Button>
+
+              {hasInProgress && (
+                <Button
+                  variant="primary"
+                  onClick={() => {
+                    if (!user?.token) {
+                      navigate('/auth');
+                      return;
+                    }
+                    navigate('/test');
+                  }}
+                  icon="play_arrow"
+                  className="px-10"
+                >
+                  Begin Test
+                </Button>
+              )}
             </div>
+
           </div>
 
           {/* Right Column: The Five Traits */}

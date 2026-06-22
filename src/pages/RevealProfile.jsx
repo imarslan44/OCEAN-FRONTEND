@@ -7,33 +7,23 @@ export default function RevealProfile() {
   
   const [isRevealing, setIsRevealing] = useState(false);
   const [entranceActive, setEntranceActive] = useState(false);
-  
-  const calculation = location.state?.calculation;
 
   useEffect(() => {
-    if (!calculation) {
-      // Redirect back if accessed directly
-      navigate('/test-intro');
-      return;
-    }
-    
-    // Trigger entrance animation delay
+    // Backend holds calculations; frontend just animates + routes.
     const timer = setTimeout(() => {
       setEntranceActive(true);
     }, 100);
     return () => clearTimeout(timer);
-  }, [calculation, navigate]);
+  }, []);
 
   const handleReveal = () => {
     setIsRevealing(true);
-    
-    // Animate scale up, blur, and fade out
+
+    // Animate scale up, blur, and fade out; results page will fetch from backend.
     setTimeout(() => {
-      navigate('/results', { state: { calculation } });
+      navigate('/results');
     }, 800);
   };
-
-  if (!calculation) return null;
 
   return (
     <div className="bg-background text-on-background font-body-md min-h-screen flex flex-col items-center justify-center overflow-hidden relative select-none">

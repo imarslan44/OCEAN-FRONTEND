@@ -6,9 +6,9 @@ const Splash = () => {
   const [driftOffset, setDriftOffset] = useState({ x: 0, y: 0 });
 
    useEffect(() => {
-    // Navigate to Onboarding 1 after 2 seconds
+    // Navigate to Onboarding 1 after 2.5 seconds
     const timer = setTimeout(() => {
-      navigate('/onboarding-1');
+      navigate('/onboarding/1');
     }, 2500);
 
     // Mouse movement micro-interaction

@@ -64,7 +64,7 @@ export default function TestResume() {
           {hasInProgress && (
             <Button variant="primary" onClick={() => navigate('/test')}>Resume Test</Button>
           )}
-          <Button variant="secondary" onClick={() => navigate('/test-intro')}>Start New Test</Button>
+          <Button variant="secondary" onClick={() => navigate('/test', { state: { startNew: true } })}>Start New Test</Button>
 
 
         </div>

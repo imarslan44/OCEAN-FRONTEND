@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -14,6 +14,7 @@ const TRAIT_LABELS = {
 
 export default function TestQuestions() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,11 @@ export default function TestQuestions() {
         setQuestions(data);
 
         // After loading questions, check for in-progress test to resume
+        if (location.state?.startNew) {
+          setLoading(false);
+          return;
+        }
+
         const token = localStorage.getItem('ocean_token');
         if (token) {
           try {

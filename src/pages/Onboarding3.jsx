@@ -1,8 +1,18 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Onboarding3 = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleNext = () => {
+    if (user?.profile?.personalityResult) {
+      navigate('/dashboard');
+    } else {
+      navigate('/test-intro');
+    }
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-background text-on-surface">
@@ -10,7 +20,7 @@ const Onboarding3 = () => {
       <header className="flex items-center justify-between px-margin-mobile md:px-gutter h-16 w-full fixed top-0 z-50">
         <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</span>
         <button 
-          onClick={() => navigate('/test-intro')} 
+          onClick={handleNext} 
           className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-4 cursor-pointer"
         >
           Skip
@@ -63,14 +73,14 @@ const Onboarding3 = () => {
             {/* Action Group */}
             <div className="w-full flex items-center gap-4">
               <button 
-                onClick={() => navigate('/onboarding-2')}
+                onClick={() => navigate('/onboarding/2')}
                 className="px-6 py-3 bg-surface-container text-on-surface font-label-sm text-label-sm rounded-lg hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span className="material-symbols-outlined text-[18px]">arrow_back</span>
                 Back
               </button>
               <button 
-               onClick={() => navigate('/test-intro')}
+               onClick={handleNext}
                 className="px-6 py-3 bg-primary text-on-primary font-label-sm text-label-sm rounded-lg hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
               >
                 Get Started

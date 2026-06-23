@@ -41,8 +41,13 @@ const TestIntro = () => {
       }
     };
 
+    if (user?.profile?.personalityResult) {
+      navigate('/dashboard');
+      return;
+    }
+
     fetchInProgress();
-  }, [user]);
+  }, [user, navigate]);
 
   // Determine question count — shortTest only has questions where shortTest = true
   const totalQuestions = 50;
@@ -184,37 +189,15 @@ const TestIntro = () => {
             {/* CTA */}
             <div className="flex items-center gap-3">
               <Button
-                variant={hasInProgress ? 'secondary' : 'primary'}
+                variant="primary"
                 onClick={() => {
-                  // If not logged in, send to signup/login (auth) first.
-                  if (!user?.token) {
-                    navigate('/auth');
-                    return;
-                  }
-                  navigate('/test-resume');
+                  navigate(hasInProgress ? '/test-resume' : '/test');
                 }}
                 icon={hasInProgress ? 'restore' : 'play_arrow'}
                 className="px-10"
               >
                 {hasInProgress ? 'Resume Test' : 'Begin Test'}
               </Button>
-
-              {hasInProgress && (
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    if (!user?.token) {
-                      navigate('/auth');
-                      return;
-                    }
-                    navigate('/test');
-                  }}
-                  icon="play_arrow"
-                  className="px-10"
-                >
-                  Begin Test
-                </Button>
-              )}
             </div>
 
           </div>

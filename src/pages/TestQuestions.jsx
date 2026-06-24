@@ -149,7 +149,21 @@ export default function TestQuestions() {
       });
       if (res.ok) {
         alert('Progress saved successfully!');
-        navigate('/test-intro');
+        // if(userHasScores(means aleardy have given any tests)){
+        //navigate to home
+        //}else{
+        //navigate to test-intro
+        //}
+        if (user.testHistory.length > 0) {
+          console.log("home")
+          navigate('/home');
+          
+        } else {
+          console.log("test-intro")
+          navigate('/test-intro');
+          
+          
+        }
       } else {
         throw new Error('Save failed');
       }

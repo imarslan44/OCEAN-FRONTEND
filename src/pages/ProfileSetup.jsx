@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
@@ -7,6 +7,40 @@ import Button from '../components/Button';
 const AGE_RANGES = [
   '16–20', '21–25', '26–30', '31–35',
   '36–40', '41–50', '51+'
+];
+
+const COUNTRIES = [
+  { code: 'AE', name: 'United Arab Emirates' },
+  { code: 'BR', name: 'Brazil' },
+  { code: 'CA', name: 'Canada' },
+  { code: 'CN', name: 'China' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'DK', name: 'Denmark' },
+  { code: 'EG', name: 'Egypt' },
+  { code: 'ES', name: 'Spain' },
+  { code: 'FI', name: 'Finland' },
+  { code: 'FR', name: 'France' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'IE', name: 'Ireland' },
+  { code: 'IN', name: 'India' },
+  { code: 'IT', name: 'Italy' },
+  { code: 'JP', name: 'Japan' },
+  { code: 'KE', name: 'Kenya' },
+  { code: 'KR', name: 'South Korea' },
+  { code: 'MX', name: 'Mexico' },
+  { code: 'NG', name: 'Nigeria' },
+  { code: 'NL', name: 'Netherlands' },
+  { code: 'NO', name: 'Norway' },
+  { code: 'NZ', name: 'New Zealand' },
+  { code: 'PK', name: 'Pakistan' },
+  { code: 'PL', name: 'Poland' },
+  { code: 'PT', name: 'Portugal' },
+  { code: 'RU', name: 'Russia' },
+  { code: 'SA', name: 'Saudi Arabia' },
+  { code: 'SE', name: 'Sweden' },
+  { code: 'SG', name: 'Singapore' },
+  { code: 'US', name: 'United States' },
+  { code: 'ZA', name: 'South Africa' },
 ];
 
 const GOALS = [
@@ -19,11 +53,35 @@ const GOALS = [
 
 const ProfileSetup = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, getUserNextStep } = useAuth();
 
   const [ageRange, setAgeRange] = useState('');
+  const [country, setCountry] = useState('');
   const [selectedGoals, setSelectedGoals] = useState([]);
-  const [step, setStep] = useState(1); // 1 = age, 2 = goals
+  const [step, setStep] = useState(1); // 1 = age + country, 2 = goals
+
+  // Initialize form from existing user data and redirect if already complete
+  useEffect(() => {
+    if (!user) return;
+
+    // Check if profile is already complete
+    if (user?.profile?.profileSetupComplete) {
+      const next = getUserNextStep(user);
+      navigate(next);
+      return;
+    }
+
+    // Initialize form with existing data if available
+    if (user?.profile?.ageRange) {
+      setAgeRange(user.profile.ageRange);
+    }
+    if (user?.profile?.country) {
+      setCountry(user.profile.country);
+    }
+    if (user?.profile?.goals?.length > 0) {
+      setSelectedGoals(user.profile.goals);
+    }
+  }, [user, navigate, getUserNextStep]);
 
   const toggleGoal = (goalId) => {
     setSelectedGoals(prev =>
@@ -33,13 +91,15 @@ const ProfileSetup = () => {
     );
   };
 
-  const handleComplete = () => {
-    updateUser({
+  const handleComplete = async () => {
+    await updateUser({
       ageRange,
+      country,
       goals: selectedGoals,
       profileSetupComplete: true,
     });
-    navigate('/test-intro');
+    const next = getUserNextStep(user);
+    navigate(next);
   };
 
   const userName = user?.name?.split(' ')[0] || 'there';
@@ -81,7 +141,7 @@ const ProfileSetup = () => {
             <div className={`h-1 rounded-full transition-all duration-500 ${step >= 2 ? 'w-10 bg-primary' : 'w-6 bg-surface-container-highest'}`}></div>
           </div>
 
-          {/* Step 1: Age Range */}
+          {/* Step 1: Age Range + Country */}
           {step === 1 && (
             <Card className="w-full p-gutter md:p-stack-lg">
               <h2 className="font-headline-md text-headline-md text-on-surface font-bold text-lg mb-1">
@@ -108,11 +168,31 @@ const ProfileSetup = () => {
                 ))}
               </div>
 
+              <div className="mt-stack-lg">
+                <h2 className="font-headline-md text-headline-md text-on-surface font-bold text-lg mb-1">
+                  Country
+                </h2>
+                <p className="font-body-md text-body-md text-on-surface-variant text-sm mb-stack-md">
+                  Helps us provide region-relevant benchmarks.
+                </p>
+
+                <select
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  className="w-full bg-surface-container-low border border-outline-variant/50 focus:border-primary focus:ring-0 px-4 py-3 font-body-md transition-colors outline-none rounded-lg"
+                >
+                  <option value="">Select your country</option>
+                  {COUNTRIES.sort((a, b) => a.name.localeCompare(b.name)).map((c) => (
+                    <option key={c.code} value={c.code}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+
               <div className="mt-stack-lg flex justify-end">
                 <Button
                   variant="primary"
                   onClick={() => setStep(2)}
-                  disabled={!ageRange}
+                  disabled={!ageRange || !country}
                   icon="arrow_forward"
                 >
                   Continue
@@ -181,7 +261,7 @@ const ProfileSetup = () => {
           <div className="flex items-center justify-center gap-2 opacity-50 mt-stack-sm">
             <span className="material-symbols-outlined text-[16px]">lock</span>
             <span className="font-label-sm text-label-sm text-[11px]">
-              All profile data stays on your device.
+              Your profile data is securely stored and private.
             </span>
           </div>
 

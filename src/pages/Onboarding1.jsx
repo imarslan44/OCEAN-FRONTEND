@@ -7,14 +7,8 @@ const Onboarding1 = () => {
   return (
     <div className="flex flex-col min-h-screen bg-background text-on-surface">
       {/* Top Navigation */}
-      <header className="flex items-center justify-between px-margin-mobile md:px-gutter h-16 w-full fixed top-0 z-50">
+      <header className="flex items-center justify-center px-margin-mobile md:px-gutter h-16 w-full fixed top-0 z-50">
         <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</span>
-        <button 
-          onClick={() => navigate('/test-intro')} 
-          className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-4 cursor-pointer"
-        >
-          Skip
-        </button>
       </header>
 
       {/* Main Content */}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { getCombinationInsights } from '../data/ocean-insights-v2.js';
 
@@ -46,26 +46,6 @@ export default function HomeDashboard() {
 
   return (
     <div className="bg-background min-h-screen pb-24 font-body-md text-on-background">
-      {/* Top App Bar */}
-      <header className="w-full sticky top-0 z-50 bg-background/90 backdrop-blur-md">
-        <div className="flex items-center justify-between px-margin-mobile py-4 max-w-container-max mx-auto">
-          <div className="flex items-center gap-2">
-            <span className="material-symbols-outlined text-primary text-[24px]">psychology</span>
-            <h1 className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</h1>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-outline cursor-pointer hover:text-primary transition-colors">notifications</span>
-            <Link to="/profile" className="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center overflow-hidden border border-outline/10 cursor-pointer">
-              <img
-                alt="Profile"
-                className="w-full h-full object-cover"
-                src={profile.avatar || "https://lh3.googleusercontent.com/aida-public/AB6AXuA8VuXlM7MElcwFl-O4wIJnYJbONCtYFRKfkbNCN--H-QaRZEa34Tv-5FuCgR505YjWRzVwaACJxfBLyA8bluOvNzrhqSFZH2Xw330XR7X0T_jgRIx4ceThrAnukS9QItfox2cUSgGcPsGv98JLRJdGSqVCB1ReJvjqB7CmQnMCPNRge4o_uWAHcMbZlE8fmKEOSHzl-HurD7W7ONXhuQ28zJT2dD3YGwEnmh-9IFIuxisO3LjBcjSu9UUUO8zVVKarpXdbVdXtdRM"}
-              />
-            </Link>
-          </div>
-        </div>
-      </header>
-
       <main className="max-w-container-max mx-auto px-margin-mobile pt-stack-md space-y-stack-lg">
         {/* Greeting & Next Test Badge */}
         <section className="space-y-stack-sm ">
@@ -81,7 +61,7 @@ export default function HomeDashboard() {
               
             </div> */}
             <button
-              onClick={() => navigate('/test-intro')}
+              onClick={() => navigate('/test')}
               className=" transparent border border-primary/20 text-primary/70 px-4 py-2 rounded-xl font-label-sm text-label-sm flex items-center gap-2 font-bold  hover:bg-primary/90 transition-all active:scale-95 cursor-pointer text-nowrap"
             >
               <span className="material-symbols-outlined text-[16px] text-nowrap">play_arrow</span>
@@ -198,26 +178,6 @@ export default function HomeDashboard() {
           )}
         </section>
       </main>
-
-      {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 w-full z-50 border-t border-outline/10 bg-surface h-16 flex justify-around items-center px-4">
-        <Link to="/dashboard" className="flex flex-col items-center justify-center text-primary font-bold active:scale-95 duration-150">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>grid_view</span>
-          <span className="font-label-sm text-[11px] mt-1">Home</span>
-        </Link>
-        <Link to="#" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">
-          <span className="material-symbols-outlined">group</span>
-          <span className="font-label-sm text-[11px] mt-1">Explore</span>
-        </Link>
-        <Link to="/results" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">
-          <span className="material-symbols-outlined">psychology</span>
-          <span className="font-label-sm text-[11px] mt-1">Results</span>
-        </Link>
-        <Link to="/profile" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">
-          <span className="material-symbols-outlined">account_circle</span>
-          <span className="font-label-sm text-[11px] mt-1">Profile</span>
-        </Link>
-      </nav>
 
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }

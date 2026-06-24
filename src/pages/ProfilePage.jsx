@@ -130,7 +130,7 @@ export default function ProfilePage() {
             <span className="material-symbols-outlined text-primary text-[24px]">psychology</span>
             <h1 className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</h1>
           </div>
-          <Link to="/dashboard" className="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low border border-outline/10 text-on-surface hover:bg-surface-container transition-colors">
+          <Link to="/home" className="w-10 h-10 flex items-center justify-center rounded-full bg-surface-container-low border border-outline/10 text-on-surface hover:bg-surface-container transition-colors">
             <span className="material-symbols-outlined">close</span>
           </Link>
         </div>
@@ -395,25 +395,7 @@ export default function ProfilePage() {
         )}
       </main>
 
-      {/* Bottom Navigation Bar */}
-      <nav className="fixed bottom-0 w-full z-50 border-t border-outline/10 bg-surface h-16 flex justify-around items-center px-4">
-        <Link to="/dashboard" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">
-          <span className="material-symbols-outlined">grid_view</span>
-          <span className="font-label-sm text-[11px] mt-1">Home</span>
-        </Link>
-        <Link to="#" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">
-          <span className="material-symbols-outlined">group</span>
-          <span className="font-label-sm text-[11px] mt-1">Explore</span>
-        </Link>
-        <Link to="/results" className="flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded">
-          <span className="material-symbols-outlined">psychology</span>
-          <span className="font-label-sm text-[11px] mt-1">Results</span>
-        </Link>
-        <Link to="/profile" className="flex flex-col items-center justify-center text-primary font-bold active:scale-95 duration-150">
-          <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>account_circle</span>
-          <span className="font-label-sm text-[11px] mt-1">Profile</span>
-        </Link>
-      </nav>
+      
     </div>
   );
 }

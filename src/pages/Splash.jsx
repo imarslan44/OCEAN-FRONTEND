@@ -6,9 +6,23 @@ const Splash = () => {
   const [driftOffset, setDriftOffset] = useState({ x: 0, y: 0 });
 
    useEffect(() => {
-    // Navigate to Onboarding 1 after 2.5 seconds
+    // Navigate after 2.5 seconds based on auth state
     const timer = setTimeout(() => {
-      navigate('/onboarding/1');
+      const storedToken = localStorage.getItem('ocean_token');
+      const storedUserStr = localStorage.getItem('ocean_user');
+
+      if (storedToken && storedUserStr) {
+        try {
+          const storedUser = JSON.parse(storedUserStr);
+          if (storedUser?.profile?.personalityResult) {
+            navigate('/dashboard');
+            return;
+          }
+        } catch (e) {
+          console.error('Error parsing stored user', e);
+        }
+      }
+      navigate('/test-intro');
     }, 2500);
 
     // Mouse movement micro-interaction

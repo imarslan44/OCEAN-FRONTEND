@@ -1,10 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const getUserNextStep = useCallback((u) => {
+    if (u?.profile?.personalityResult) return '/dashboard';
+    if (!u?.profile?.profileSetupComplete) return '/profile/setup';
+    if (!u?.profile?.onboardingComplete) return '/onboarding/1';
+    return '/test-intro';
+  }, []);
 
   // Sync session with backend on mount
   useEffect(() => {
@@ -51,11 +58,11 @@ export const AuthProvider = ({ children }) => {
     initAuth();
   }, []);
 
-  const signup = async (name, email, password) => {
+  const signup = async (email, password) => {
     const response = await fetch('/api/v1/users/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password, username: name })
+      body: JSON.stringify({ email, password })
     });
 
     if (!response.ok) {
@@ -149,7 +156,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signup, login, logout, updateUser }}>
+    <AuthContext.Provider value={{ user, loading, signup, login, logout, updateUser, getUserNextStep }}>
       {!loading && children}
     </AuthContext.Provider>
   );

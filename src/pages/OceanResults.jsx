@@ -277,19 +277,7 @@ export default function OceanResults() {
       {/* Spacer for mobile nav */}
       <div className="h-24 md:hidden"></div>
 
-      {/* Bottom Nav Bar (Mobile) */}
-      <footer className="md:hidden fixed bottom-0 w-full z-50 border-t border-outline/10 bg-surface">
-        <div className="flex justify-around items-center h-16 px-4">
-          <Link to="/dashboard" className="flex flex-col items-center justify-center text-outline hover:text-primary transition-all active:scale-95 duration-150 p-2">
-            <span className="material-symbols-outlined">grid_view</span>
-            <span className="font-label-sm text-[11px] mt-1">Home</span>
-          </Link>
-          <div className="flex flex-col items-center justify-center text-primary font-bold active:scale-95 duration-150 p-2">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>person</span>
-            <span className="font-label-sm text-[11px] mt-1">Results</span>
-          </div>
-        </div>
-      </footer>
+      
 
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }

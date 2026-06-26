@@ -264,7 +264,7 @@ export default function OceanResults() {
 
           <div className="flex justify-center pt-8">
             <button 
-              onClick={() => navigate('/dashboard')}
+              onClick={() => navigate('/home')}
               className="bg-primary text-on-primary py-4 px-8 rounded-full font-label-lg font-bold tracking-widest hover:scale-105 active:scale-95 transition-transform shadow-lg"
             >
               Go to Dashboard

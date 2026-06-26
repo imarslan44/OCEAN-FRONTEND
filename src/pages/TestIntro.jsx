@@ -67,13 +67,7 @@ const TestIntro = () => {
 
           {user?.token && (
             <div className="flex items-center gap-2">
-              <button
-                onClick={() => navigate('/profile/setup')}
-                className="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors py-2 px-3 cursor-pointer flex items-center gap-1"
-              >
-                <span className="material-symbols-outlined !text-[16px]">arrow_back</span>
-                Back
-              </button>
+             
 
               <div className="relative">
                 <button

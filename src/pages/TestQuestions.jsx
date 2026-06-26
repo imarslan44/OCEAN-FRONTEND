@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Button from '../components/Button';
 import Card from '../components/Card';
@@ -23,6 +23,13 @@ export default function TestQuestions() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState({}); // maps questionId -> selected answer (1-5)
   const [testType, setTestType] = useState('full'); // 'full' or 'short'
+
+  const getCancelTestRoute = () => {
+    if (user?.testHistory?.length > 0) {
+      return '/home';
+    }
+    return '/test-intro';
+  };
 
   // Fetch questions on mount, then check for saved progress
   useEffect(() => {
@@ -149,11 +156,7 @@ export default function TestQuestions() {
       });
       if (res.ok) {
         alert('Progress saved successfully!');
-        // if(userHasScores(means aleardy have given any tests)){
-        //navigate to home
-        //}else{
-        //navigate to test-intro
-        //}
+        
         if (user.testHistory.length > 0) {
           console.log("home")
           navigate('/home');
@@ -216,6 +219,7 @@ export default function TestQuestions() {
               >
                 Full (50q)
               </button>
+              
               <button 
                 onClick={() => {
                   setTestType('short');
@@ -225,17 +229,29 @@ export default function TestQuestions() {
               >
                 Short (25q)
               </button>
+          
             </div>
             
             <span className="font-label-sm text-label-sm text-outline">
               {currentIndex + 1} / {activeQuestions.length}
             </span>
+           <div className="flex gap-3 items-center justify-end">
+            <Link to={`${getCancelTestRoute}`} >
+             <button 
+              
+              className=" font-light text-lg md:text-xl text-primary/70 hover:opacity-70 transition-opacity cursor-pointer font-bold"
+            >
+              Cancel  
+            </button>  
+            </Link>
+            
+
             <button 
               onClick={handleSaveAndExit}
-              className="font-label-sm text-label-sm text-primary hover:opacity-70 transition-opacity cursor-pointer font-bold"
-            >
+              className="font-light text-label-sm bg-primary/80 text-on-primary/90 hover:opacity-70 border-b-1  border-primary px-3 py-1 md:px-4 md:py-2 rounded-sm transition-opacity cursor-pointer font-bold">
               Save & Exit
             </button>
+            </div>
           </div>
         </div>
         

@@ -46,13 +46,13 @@ export default function HomeDashboard() {
 
   return (
     <div className="bg-background min-h-screen pb-24 font-body-md text-on-background">
-      <main className="max-w-container-max mx-auto px-margin-mobile pt-stack-md space-y-stack-lg">
+      <main className="max-w-container-max mx-auto   px-margin-mobile pt-stack-md space-y-stack-lg">
         {/* Greeting & Next Test Badge */}
-        <section className="space-y-stack-sm ">
+        <section className="space-y-stack-sm relative">
           <div className="flex justify-between items-center
            ">
             <div>
-              <h2 className="font-headline-md text-headline-md text-on-background font-bold">Hey, {user?.username || 'Guest'}</h2>
+              <h2 className="font-headline-md text-headline-md text-on-background font-bold text-xl">Hey, {user?.username || 'Guest'}</h2>
               <p className="font-body-md text-body-md text-on-surface-variant">Your clarity journey continues.</p>
             </div>
             {/* <div className="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-2 font-bold shadow-sm">
@@ -62,9 +62,9 @@ export default function HomeDashboard() {
             </div> */}
             <button
               onClick={() => navigate('/test')}
-              className=" transparent border border-primary/20 text-primary/70 px-4 py-2 rounded-xl font-label-sm text-label-sm flex items-center gap-2 font-bold  hover:bg-primary/90 transition-all active:scale-95 cursor-pointer text-nowrap"
+              className=" absolute top-0 right-0 transparent   text-primary bg-surface-container px-2 py-1 rounded-sm font-label-sm text-label-sm flex items-center gap-0 font-semibold  hover:bg-primary/90 hover:text-on-primary transition-all active:scale-95 cursor-pointer text-nowrap"
             >
-              <span className="material-symbols-outlined text-[16px] text-nowrap">play_arrow</span>
+              <span className="material-symbols-outlined text-[14px] ">play_arrow</span>
               Take New Test
             </button>
           </div>

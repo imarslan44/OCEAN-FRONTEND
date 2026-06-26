@@ -7,7 +7,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   const getUserNextStep = useCallback((u) => {
-    if (u?.profile?.personalityResult) return '/dashboard';
+    if (u?.profile?.personalityResult) return '/home';
     if (!u?.profile?.profileSetupComplete) return '/profile/setup';
     if (!u?.profile?.onboardingComplete) return '/onboarding/1';
     return '/test-intro';

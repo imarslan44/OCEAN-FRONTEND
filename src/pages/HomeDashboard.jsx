@@ -1,17 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getCombinationInsights } from '../data/ocean-insights-v2.js';
+import { getCombinationInsights } from '../data/ocean-insights-v3.js';
+import DashboardWaitingCard from './compare/DashboardWaitingCard';
 
 export default function HomeDashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [animate, setAnimate] = useState(false);
+  const [invites, setInvites] = useState([]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimate(true);
     }, 200);
+
+    const fetchInvites = async () => {
+      try {
+        const token = localStorage.getItem('ocean_token') || localStorage.getItem('token');
+        const res = await fetch('http://localhost:5000/api/v1/invites/me', {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        if (data.invites) setInvites(data.invites);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchInvites();
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -115,6 +132,17 @@ export default function HomeDashboard() {
           </div>
         </section>
 
+        {invites.length > 0 && (
+          <section className="space-y-stack-md">
+            <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Compare Invites</h3>
+            <div className="flex flex-col gap-4">
+              {invites.map(invite => (
+                <DashboardWaitingCard key={invite._id} invite={invite} currentUserId={user.id} />
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Quick Actions Grid */}
         <section className="space-y-stack-md">
           <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Quick Actions</h3>
@@ -133,7 +161,10 @@ export default function HomeDashboard() {
               <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
             </button>
             {/* Action 2 */}
-            <button className="group flex items-center justify-between p-stack-md bg-surface-container-high border border-outline/10 text-on-surface rounded-lg transition-all hover:bg-surface-dim active:scale-[0.98] text-left">
+            <button 
+              onClick={() => navigate('/compare/intro')}
+              className="group flex items-center justify-between p-stack-md bg-surface-container-high border border-outline/10 text-on-surface rounded-lg transition-all hover:bg-surface-dim active:scale-[0.98] text-left"
+            >
               <div className="flex items-center gap-stack-md">
                 <div className="w-12 h-12 flex items-center justify-center bg-primary/5 rounded-full text-primary">
                   <span className="material-symbols-outlined text-[28px]">compare_arrows</span>

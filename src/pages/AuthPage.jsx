@@ -73,8 +73,14 @@ const AuthPage = () => {
     setIsSubmitting(true);
     try {
       await updateUser({ username: username.trim() });
-      const next = getUserNextStep(user);
-      navigate(next);
+      const redirect = localStorage.getItem('ocean_redirect');
+      if (redirect) {
+        localStorage.removeItem('ocean_redirect');
+        navigate(redirect);
+      } else {
+        const next = getUserNextStep(user);
+        navigate(next);
+      }
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {
@@ -89,8 +95,14 @@ const AuthPage = () => {
     setIsSubmitting(true);
     try {
       await login(email.trim(), password);
-      const next = getUserNextStep(user);
-      navigate(next);
+      const redirect = localStorage.getItem('ocean_redirect');
+      if (redirect) {
+        localStorage.removeItem('ocean_redirect');
+        navigate(redirect);
+      } else {
+        const next = getUserNextStep(user);
+        navigate(next);
+      }
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.');
     } finally {

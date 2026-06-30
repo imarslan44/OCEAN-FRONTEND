@@ -19,6 +19,11 @@ import RevealProfile from './pages/RevealProfile';
 import OceanResults from './pages/OceanResults';
 import HomeDashboard from './pages/HomeDashboard';
 
+import CompareIntro from './pages/compare/CompareIntro';
+import InviteLanding from './pages/compare/InviteLanding';
+import CompareProcessing from './pages/compare/CompareProcessing';
+import CompareReport from './pages/compare/CompareReport';
+
 function SplashRoute() {
   return <Splash />;
 }
@@ -44,6 +49,12 @@ export default function App() {
 
         <Route path="/calculating" element={<CalculatingProfile />} />
         <Route path="/reveal" element={<RevealProfile />} />
+
+        {/* Compare Flow */}
+        <Route path="/compare/intro" element={<CompareIntro />} />
+        <Route path="/invite/:token" element={<InviteLanding />} />
+        <Route path="/compare/processing/:token" element={<CompareProcessing />} />
+        <Route path="/compare/report/:token" element={<CompareReport />} />
 
         {/* Routes with the main layout */}
         <Route element={<MainLayout />}>

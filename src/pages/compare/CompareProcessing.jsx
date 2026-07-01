@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const STEPS = [
   "Analyzing behavioral profile...",
@@ -13,7 +14,28 @@ const STEPS = [
 export default function CompareProcessing() {
   const { token } = useParams();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
+  const [otherPersonName, setOtherPersonName] = useState(null);
+
+  useEffect(() => {
+    const fetchInvite = async () => {
+      try {
+        const res = await fetch(`http://localhost:5000/api/v1/invites/${token}`);
+        const data = await res.json();
+        if (data.invite) {
+          const isInviter = data.invite.inviterId?._id === user?.id;
+          const otherName = isInviter 
+            ? (data.invite.inviteeId?.username || 'Friend') 
+            : (data.invite.inviterId?.username || 'Friend');
+          setOtherPersonName(otherName);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    if (user?.id) fetchInvite();
+  }, [token, user?.id]);
 
   useEffect(() => {
     // 6 steps over ~4.5 seconds (750ms per step)
@@ -55,7 +77,10 @@ export default function CompareProcessing() {
           <span className="material-symbols-outlined absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-primary">psychology</span>
         </div>
 
-        <h2 className="font-headline-md text-2xl font-bold mb-4">Building Comparison</h2>
+        <h2 className="font-headline-md text-2xl font-bold mb-2">Building Comparison</h2>
+        {otherPersonName && (
+          <p className="text-on-surface-variant text-base mb-4">with {otherPersonName}</p>
+        )}
         
         <div className="h-6 relative w-full overflow-hidden">
           {STEPS.map((step, idx) => (

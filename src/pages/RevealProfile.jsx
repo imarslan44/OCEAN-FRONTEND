@@ -21,7 +21,13 @@ export default function RevealProfile() {
 
     // Animate scale up, blur, and fade out; results page will fetch from backend.
     setTimeout(() => {
-      navigate('/results');
+      const redirect = localStorage.getItem('ocean_redirect');
+      if (redirect) {
+        localStorage.removeItem('ocean_redirect');
+        navigate(redirect);
+      } else {
+        navigate('/results');
+      }
     }, 800);
   };
 

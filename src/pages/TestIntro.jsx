@@ -22,10 +22,13 @@ const TestIntro = () => {
   useEffect(() => {
     if (!user) return;
 
-    const next = getUserNextStep(user);
-    if (next !== '/test-intro') {
-      navigate(next);
-      return;
+    const redirect = localStorage.getItem('ocean_redirect');
+    if (!redirect) {
+      const next = getUserNextStep(user);
+      if (next !== '/test-intro') {
+        navigate(next);
+        return;
+      }
     }
 
     const fetchInProgress = async () => {

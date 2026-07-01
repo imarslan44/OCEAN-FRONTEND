@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getCombinationInsights } from '../data/ocean-insights-v3.js';
 import DashboardWaitingCard from './compare/DashboardWaitingCard';
 
 export default function HomeDashboard() {
@@ -9,33 +8,76 @@ export default function HomeDashboard() {
   const navigate = useNavigate();
   const [animate, setAnimate] = useState(false);
   const [invites, setInvites] = useState([]);
+  const [insightData, setInsightData] = useState(null);
+  const [showAllComparisons, setShowAllComparisons] = useState(false);
+
+  const fetchInvites = async () => {
+    try {
+      const token = localStorage.getItem('ocean_token') || localStorage.getItem('token');
+      const res = await fetch('http://localhost:5000/api/v1/invites/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const data = await res.json();
+      if (data.invites) setInvites(data.invites);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const fetchInsights = async () => {
+    try {
+      const token = localStorage.getItem('ocean_token') || localStorage.getItem('token');
+      const res = await fetch('/api/v1/tests/completed', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data?.calculation) {
+          setInsightData(data.calculation);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setAnimate(true);
     }, 200);
 
-    const fetchInvites = async () => {
-      try {
-        const token = localStorage.getItem('ocean_token') || localStorage.getItem('token');
-        const res = await fetch('http://localhost:5000/api/v1/invites/me', {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        const data = await res.json();
-        if (data.invites) setInvites(data.invites);
-      } catch (err) {
-        console.error(err);
-      }
-    };
     fetchInvites();
+    fetchInsights();
 
     return () => clearTimeout(timer);
   }, []);
 
+  const handleRemoveInvite = async (token) => {
+    try {
+      const accessToken = localStorage.getItem('ocean_token') || localStorage.getItem('token');
+      const res = await fetch(`http://localhost:5000/api/v1/invites/${token}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${accessToken}` }
+      });
+
+      if (res.ok) {
+        setInvites(prev => prev.filter(invite => invite.token !== token));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const profile = user?.profile || {};
   const result = profile.personalityResult || {};
 
-  const scores = result ? {
+  const scores = insightData?.scores ? {
+    O: insightData.scores.O || 0,
+    C: insightData.scores.C || 0,
+    E: insightData.scores.E || 0,
+    A: insightData.scores.A || 0,
+    N: insightData.scores.N || 0
+  } : result ? {
     O: result.openness || 0,
     C: result.conscientiousness || 0,
     E: result.extraversion || 0,
@@ -43,20 +85,15 @@ export default function HomeDashboard() {
     N: result.neuroticism || 0
   } : { O: 0, C: 0, E: 0, A: 0, N: 0 };
 
-  // Use the new topCombinations from the v2 engine if available, otherwise generate them dynamically
-  let topCombinations = result.topCombinations;
-  if (!topCombinations || topCombinations.length === 0) {
-    if (result && Object.keys(scores).some(k => scores[k] > 0)) {
-      const combinationInsights = getCombinationInsights(scores);
-      topCombinations = combinationInsights.default;
-    } else {
-      topCombinations = [];
-    }
-  }
+  const topCombinations = Array.isArray(insightData?.topCombinations)
+    ? insightData.topCombinations
+    : Array.isArray(result.topCombinations)
+      ? result.topCombinations
+      : [];
 
   // The main profile card will feature their #1 combination (or fallback to archetype)
   const primaryCombo = topCombinations.length > 0 ? topCombinations[0] : null;
-  const archetypeTitle = primaryCombo ? primaryCombo.title : (result.personalityType || 'Take the test to discover your archetype');
+  const archetypeTitle = primaryCombo ? primaryCombo.title : (insightData?.archetype?.title || result.personalityType || 'Take the test to discover your archetype');
 
   // The carousel will feature all 4 top combinations
   const carouselCombos = topCombinations.slice(0, 4);
@@ -134,10 +171,29 @@ export default function HomeDashboard() {
 
         {invites.length > 0 && (
           <section className="space-y-stack-md">
-            <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Compare Invites</h3>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Compare Invites</h3>
+              {invites.length > 2 && (
+                <button
+                  type="button"
+                  onClick={() => setShowAllComparisons(prev => !prev)}
+                  className="flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
+                >
+                  <span>{showAllComparisons ? 'Show Less' : 'Show All'}</span>
+                  <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${showAllComparisons ? 'rotate-180' : ''}`}>
+                    expand_more
+                  </span>
+                </button>
+              )}
+            </div>
             <div className="flex flex-col gap-4">
-              {invites.map(invite => (
-                <DashboardWaitingCard key={invite._id} invite={invite} currentUserId={user.id} />
+              {invites.slice(0, showAllComparisons ? invites.length : 2).map(invite => (
+                <DashboardWaitingCard
+                  key={invite._id}
+                  invite={invite}
+                  currentUserId={user?.id}
+                  onRemove={() => handleRemoveInvite(invite.token)}
+                />
               ))}
             </div>
           </section>

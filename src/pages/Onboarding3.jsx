@@ -1,21 +1,13 @@
-import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const Onboarding3 = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useAuth();
+  const { updateUser } = useAuth();
 
-  useEffect(() => {
-    updateUser({ onboardingComplete: true });
-  }, [updateUser]);
-
-  const handleNext = () => {
-    if (user?.profile?.personalityResult) {
-      navigate('/dashboard');
-    } else {
-      navigate('/test-intro');
-    }
+  const handleNext = async () => {
+    await updateUser({ onboardingComplete: true });
+    navigate('/test-intro');
   };
 
   return (

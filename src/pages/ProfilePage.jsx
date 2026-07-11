@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import Button from '../components/Button';
 
 const AGE_RANGES = ['16–20', '21–25', '26–30', '31–35', '36–40', '41–50'];
 
@@ -22,6 +21,7 @@ export default function ProfilePage() {
 
   const profile = user?.profile || {};
   const personalityResult = profile?.personalityResult || {};
+  const displayName = user?.username || user?.name?.split(' ')[0] || user?.email?.split('@')[0] || 'there';
 
   const [formState, setFormState] = useState({
     username: user?.username || '',
@@ -152,7 +152,7 @@ export default function ProfilePage() {
                 />
               </div>
               
-              <h1 className="font-headline-md text-headline-md text-on-surface font-bold mt-4">{user?.username || 'Guest'}</h1>
+              <h1 className="font-headline-md text-headline-md text-on-surface font-bold mt-4">{displayName}</h1>
               <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-label-sm text-[12px] mt-2 border ${formState.isPublic ? 'bg-primary/5 text-primary border-primary/20' : 'bg-surface-container-high text-on-surface-variant border-outline/10'}`}>
                 <span className="material-symbols-outlined text-[14px]">{formState.isPublic ? 'public' : 'lock'}</span>
                 {formState.isPublic ? 'Public Profile' : 'Private Profile'}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -14,7 +14,7 @@ const LOADING_STATUS_STEPS = [
 export default function CalculatingProfile() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   
   const [progress, setProgress] = useState(0);
   const [statusText, setStatusText] = useState(LOADING_STATUS_STEPS[0]);
@@ -64,6 +64,7 @@ export default function CalculatingProfile() {
         }
 
         const data = await res.json();
+        await refreshUser();
         setApiResult(data.calculation);
       } catch (err) {
         console.error(err);
@@ -72,7 +73,7 @@ export default function CalculatingProfile() {
     };
 
     submitAnswers();
-  }, [testData, testType, navigate, user]);
+  }, [testData, testType, navigate, user, refreshUser]);
 
   // 2. Animate the dots
   useEffect(() => {

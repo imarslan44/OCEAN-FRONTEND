@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
@@ -92,13 +92,13 @@ const ProfileSetup = () => {
   };
 
   const handleComplete = async () => {
-    await updateUser({
+    const updatedUser = await updateUser({
       ageRange,
       country,
       goals: selectedGoals,
       profileSetupComplete: true,
     });
-    const next = getUserNextStep(user);
+    const next = getUserNextStep(updatedUser);
     navigate(next);
   };
 

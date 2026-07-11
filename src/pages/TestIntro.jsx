@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
@@ -14,22 +14,13 @@ const TRAITS = [
 
 const TestIntro = () => {
   const navigate = useNavigate();
-  const { user, logout, getUserNextStep } = useAuth();
+  const { user, logout, updateUser, hasCompletedTest } = useAuth();
   const [expandedTrait, setExpandedTrait] = useState(null);
   const [hasInProgress, setHasInProgress] = useState(false);
   const [authMenuOpen, setAuthMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!user) return;
-
-    const redirect = localStorage.getItem('ocean_redirect');
-    if (!redirect) {
-      const next = getUserNextStep(user);
-      if (next !== '/test-intro') {
-        navigate(next);
-        return;
-      }
-    }
 
     const fetchInProgress = async () => {
       try {
@@ -51,11 +42,24 @@ const TestIntro = () => {
     };
 
     fetchInProgress();
-  }, [user, navigate, getUserNextStep]);
+  }, [user]);
 
-  const ctaLabel = !user ? 'Get Started' : (hasInProgress ? 'Resume Test' : 'Begin Test');
-  const ctaIcon = user && hasInProgress ? 'restore' : (user ? 'play_arrow' : 'arrow_forward');
-  const ctaTarget = !user ? '/auth' : (hasInProgress ? '/test-resume' : '/test');
+  const completedTest = hasCompletedTest(user);
+  const ctaLabel = hasInProgress ? 'Resume Test' : (completedTest ? 'Take New Test' : 'Begin Test');
+  const ctaIcon = hasInProgress ? 'restore' : 'play_arrow';
+  const ctaTarget = hasInProgress ? '/test-resume' : '/test';
+
+  const handleStartTest = async () => {
+    if (!completedTest) {
+      await updateUser({ testSkipped: false });
+    }
+    navigate(ctaTarget);
+  };
+
+  const handleSkipForNow = async () => {
+    await updateUser({ testSkipped: true });
+    navigate('/home');
+  };
 
   return (
     <div className="bg-background min-h-screen flex flex-col items-center">
@@ -141,20 +145,27 @@ const TestIntro = () => {
             <div className="flex flex-col gap-2">
               <Button
                 variant="primary"
-                onClick={() => navigate(ctaTarget)}
+                onClick={handleStartTest}
                 icon={ctaIcon}
                 className="px-10"
               >
                 {ctaLabel}
               </Button>
+              {!completedTest && (
+                <Button
+                  variant="secondary"
+                  onClick={handleSkipForNow}
+                  icon="schedule"
+                  className="px-10"
+                >
+                  Skip For Now
+                </Button>
+              )}
             </div>
 
-            {!user && (
+            {!completedTest && (
               <p className="mt-4 font-body-md text-body-md text-on-surface-variant">
-                Already have an account?{' '}
-                <button type="button" onClick={() => navigate('/auth')} className="text-primary font-semibold hover:underline cursor-pointer">
-                  Log in
-                </button>
+                You can use Learn without this. Results and Compare unlock after your baseline is complete.
               </p>
             )}
           </div>

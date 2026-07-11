@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Card from '../components/Card';
@@ -6,7 +6,7 @@ import Button from '../components/Button';
 
 const AuthPage = () => {
   const navigate = useNavigate();
-  const { signup, login, updateUser, user, getUserNextStep } = useAuth();
+  const { signup, login, updateUser, getUserNextStep } = useAuth();
 
   const [mode, setMode] = useState('signup');
   const [step, setStep] = useState('A');
@@ -36,6 +36,7 @@ const AuthPage = () => {
     if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setError('Please enter a valid email address.');
       return false;
+      
     }
     if (!password || password.length < 6) {
       setError('Password must be at least 6 characters.');
@@ -72,13 +73,13 @@ const AuthPage = () => {
     }
     setIsSubmitting(true);
     try {
-      await updateUser({ username: username.trim() });
+      const updatedUser = await updateUser({ username: username.trim() });
       const redirect = localStorage.getItem('ocean_redirect');
       if (redirect) {
         localStorage.removeItem('ocean_redirect');
         navigate(redirect);
       } else {
-        const next = getUserNextStep(user);
+        const next = getUserNextStep(updatedUser);
         navigate(next);
       }
     } catch (err) {
@@ -94,13 +95,13 @@ const AuthPage = () => {
     setError('');
     setIsSubmitting(true);
     try {
-      await login(email.trim(), password);
+      const loggedInUser = await login(email.trim(), password);
       const redirect = localStorage.getItem('ocean_redirect');
       if (redirect) {
         localStorage.removeItem('ocean_redirect');
         navigate(redirect);
       } else {
-        const next = getUserNextStep(user);
+        const next = getUserNextStep(loggedInUser);
         navigate(next);
       }
     } catch (err) {

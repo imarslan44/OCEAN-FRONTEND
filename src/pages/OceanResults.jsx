@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -7,6 +7,8 @@ export default function OceanResults() {
   const { user, loading: authLoading } = useAuth();
   const [animate, setAnimate] = useState(false);
   const [calcData, setCalcData] = useState(null);
+  const [noResults, setNoResults] = useState(false);
+  const [isCheckingResults, setIsCheckingResults] = useState(true);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [expandedTraits, setExpandedTraits] = useState({});
 
@@ -27,7 +29,7 @@ export default function OceanResults() {
           if (res.status === 401) {
             navigate('/auth');
           } else {
-            navigate('/test-intro');
+            setNoResults(true);
           }
           return;
         }
@@ -35,11 +37,13 @@ export default function OceanResults() {
         if (data?.calculation) {
           setCalcData(data.calculation);
         } else {
-          navigate('/test-intro');
+          setNoResults(true);
         }
       } catch (e) {
         console.error('Failed to fetch results:', e);
-        navigate('/dashboard');
+        setNoResults(true);
+      } finally {
+        setIsCheckingResults(false);
       }
     };
     fetchResults();
@@ -51,10 +55,55 @@ export default function OceanResults() {
     return () => clearTimeout(timer);
   }, [calcData]);
 
-  if (authLoading || !calcData) {
+  if (authLoading || isCheckingResults) {
     return (
       <div className="bg-background min-h-screen flex items-center justify-center">
         <span className="material-symbols-outlined animate-spin text-primary text-[48px]">progress_activity</span>
+      </div>
+    );
+  }
+
+  if (noResults || !calcData) {
+    return (
+      <div className="bg-background min-h-screen flex flex-col font-body-md text-on-background pb-24">
+        <header className="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-md">
+          <div className="flex items-center justify-between px-margin-mobile py-4 max-w-container-max mx-auto">
+            <Link to="/home" className="flex items-center gap-2 cursor-pointer active:opacity-70">
+              <span className="material-symbols-outlined text-primary text-[24px]">psychology</span>
+              <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</span>
+            </Link>
+          </div>
+        </header>
+
+        <main className="flex flex-grow items-center justify-center px-margin-mobile py-stack-lg">
+          <section className="w-full max-w-lg rounded-lg border border-primary/10 bg-surface p-gutter text-center shadow-sm">
+            <div className="mx-auto mb-stack-md flex h-16 w-16 items-center justify-center rounded-full bg-primary-fixed text-on-primary-fixed">
+              <span className="material-symbols-outlined !text-[32px]">lock_open</span>
+            </div>
+            <h1 className="font-headline-md text-2xl font-bold text-on-surface">Take your test to get insights.</h1>
+            <p className="mt-3 font-body-md text-body-md leading-relaxed text-on-surface-variant">
+              Your results page will show your OCEAN scores, core dynamic, and trait-level story once your baseline assessment is complete.
+            </p>
+            <div className="mt-stack-lg flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <button
+                type="button"
+                onClick={() => navigate('/test-intro')}
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-3 font-label-sm text-label-sm font-bold uppercase tracking-wider text-on-primary transition-all active:scale-[0.98]"
+              >
+                <span className="material-symbols-outlined !text-[18px]">quiz</span>
+                Take Test
+              </button>
+              <button
+                type="button"
+                onClick={() => navigate('/learn')}
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-primary px-5 py-3 font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary transition-all active:scale-[0.98]"
+              >
+                <span className="material-symbols-outlined !text-[18px]">school</span>
+                Learn
+              </button>
+            </div>
+          </section>
+        </main>
       </div>
     );
   }
@@ -93,7 +142,7 @@ export default function OceanResults() {
       {/* Top App Bar */}
       <header className="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-md">
         <div className="flex items-center justify-between px-margin-mobile py-4 max-w-container-max mx-auto">
-          <Link to="/dashboard" className="flex items-center gap-2 cursor-pointer active:opacity-70">
+          <Link to="/home" className="flex items-center gap-2 cursor-pointer active:opacity-70">
             <span className="material-symbols-outlined text-primary text-[24px]">psychology</span>
             <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</span>
           </Link>

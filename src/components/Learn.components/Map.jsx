@@ -29,9 +29,9 @@ const IsometricNode = ({ state }) => {
         <motion.div 
           animate={{ y: [-6, 6, -6] }} 
           transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-          className="relative z-10 w-12 h-12 bg-[#22c55e] rounded-xl flex items-center justify-center shadow-[0_8px_15px_rgba(34,197,94,0.4)] border-[3px] border-white/60 rotate-45 mb-10"
+          className="relative z-10 w-12 h-12 bg-red-700 rounded-xl flex items-center justify-center shadow-[0_8px_15px_rgba(34,197,94,0.4)] border-[3px] border-white rotate-45 mb-10"
         >
-           <div className="-rotate-45 bg-white w-4 h-4 rounded-sm shadow-sm"></div>
+           <div className="-rotate-45 bg-black w-4 h-4 rounded-sm shadow-sm"></div>
         </motion.div>
       </div>
     );

@@ -1,28 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
  import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Splash = () => {
   const navigate = useNavigate();
+  const { user, getUserNextStep } = useAuth();
   const [driftOffset, setDriftOffset] = useState({ x: 0, y: 0 });
 
    useEffect(() => {
     // Navigate after 2.5 seconds based on auth state
     const timer = setTimeout(() => {
-      const storedToken = localStorage.getItem('ocean_token');
-      const storedUserStr = localStorage.getItem('ocean_user');
-
-      if (storedToken && storedUserStr) {
-        try {
-          const storedUser = JSON.parse(storedUserStr);
-          if (storedUser?.profile?.personalityResult) {
-            navigate('/dashboard');
-            return;
-          }
-        } catch (e) {
-          console.error('Error parsing stored user', e);
-        }
-      }
-      navigate('/test-intro');
+      navigate(getUserNextStep(user), { replace: true });
     }, 2500);
 
     // Mouse movement micro-interaction
@@ -38,7 +26,7 @@ const Splash = () => {
       clearTimeout(timer);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-   }, [navigate]);
+   }, [navigate, user, getUserNextStep]);
 
   return (
     <main className="relative h-screen w-full flex flex-col items-center justify-center p-margin-mobile md:p-gutter bg-primary text-surface overflow-hidden">

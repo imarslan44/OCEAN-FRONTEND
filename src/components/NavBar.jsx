@@ -14,14 +14,15 @@ const NavBar = () => {
           <span className="material-symbols-outlined">grid_view</span>
           <span className="font-label-sm text-[11px] mt-1">Home</span>
         </NavLink>
-        <NavLink to="#" className={({ isActive }) => isActive ? `flex flex-col items-center justify-center text-outline/40 hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded` : `flex flex-col items-center justify-center text-outline/20 hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
-          <span className="material-symbols-outlined">group</span>
-          <span className="font-label-sm text-[11px] mt-1">Explore</span>
-        </NavLink>
         <NavLink to="/results" className={({ isActive }) => isActive ? activeNavStyle : `flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
           <span className="material-symbols-outlined">psychology</span>
           <span className="font-label-sm text-[11px] mt-1">Results</span>
         </NavLink>
+        <NavLink to="/learn" className={({ isActive }) => isActive ? activeNavStyle : `flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
+          <span className="material-symbols-outlined">school</span>
+          <span className="font-label-sm text-[11px] mt-1">Learn</span>
+        </NavLink>
+        
         <NavLink to="/profile" className={({ isActive }) => isActive ? activeNavStyle : `flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
           <span className="material-symbols-outlined" style={{}}>account_circle</span>
           <span className="font-label-sm text-[11px] mt-1">Profile</span>

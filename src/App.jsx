@@ -18,6 +18,8 @@ import CalculatingProfile from './pages/CalculatingProfile';
 import RevealProfile from './pages/RevealProfile';
 import OceanResults from './pages/OceanResults';
 import HomeDashboard from './pages/HomeDashboard';
+import LearnDashboard from './pages/LearnDashboard';
+import ExerciseContainer from './pages/ExerciseContainer';
 
 import CompareIntro from './pages/compare/CompareIntro';
 import InviteLanding from './pages/compare/InviteLanding';
@@ -55,10 +57,12 @@ export default function App() {
         <Route path="/invite/:token" element={<InviteLanding />} />
         <Route path="/compare/processing/:token" element={<CompareProcessing />} />
         <Route path="/compare/report/:token" element={<CompareReport />} />
+        <Route path="/learn/:skillId/level/:levelId" element={<ExerciseContainer />} />
 
         {/* Routes with the main layout */}
         <Route element={<MainLayout />}>
           <Route path="/home" element={<HomeDashboard />} />
+          <Route path="/learn" element={<LearnDashboard />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/results" element={<OceanResults />} />
         </Route>

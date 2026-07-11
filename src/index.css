@@ -74,6 +74,31 @@
   --radius-full: 0.75rem;
 }
 
+/* Brilliant theme override exclusively for the Learn feature */
+.theme-learn {
+  --color-surface: #ffffff;
+  --color-background: #f7f9fa;
+  --color-primary: #1865f2;
+  --color-primary-dark: #1250c5;
+  --color-secondary: #22c55e;
+  --color-secondary-dark: #16a34a;
+  --color-error: #ff4a4a;
+  --color-on-surface: #1e293b;
+  --color-on-background: #0f172a;
+  --color-surface-dim: #e2e8f0;
+  --color-surface-variant: #f1f5f9;
+  --color-surface-container: #ffffff;
+  --color-on-primary: #ffffff;
+  --color-on-secondary: #ffffff;
+  --color-outline: #cbd5e1;
+  --color-outline-variant: #94a3b8;
+  --font-sans: 'Inter', 'Public Sans', system-ui, sans-serif;
+  --radius-default: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-full: 9999px;
+}
+
 @keyframes subtle-drift {
   0% { transform: translateY(0px) scale(1); opacity: 0; }
   100% { transform: translateY(-10px) scale(1.05); opacity: 1; }

@@ -8,7 +8,8 @@ const LOADING_STATUS_STEPS = [
   "Mapping neuroticism variance...",
   "Synthesizing openness scores...",
   "Finalizing trait correlations...",
-  "Generating personalized report..."
+  "Generating personalized report...",
+  
 ];
 
 export default function CalculatingProfile() {

@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { playSound, unlockAudio } from "../../assets/soundEffects";
+import { playSound } from "../../assets/soundEffects";
+import ScenarioStage, { ScenarioReview } from "./ScenarioStage";
 
 const Tags = ({ data, next, deferFeedback = false }) => {
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [scenarioRead, setScenarioRead] = useState(!data.scenario);
   const complete = data.items.every((item) => answers[item.id]);
   const attempts = data.items.map((item) => ({
     itemId: item.id,
@@ -27,16 +29,30 @@ const Tags = ({ data, next, deferFeedback = false }) => {
     else setSubmitted(true);
   };
 
+  if (!scenarioRead) {
+    return (
+      <ScenarioStage
+        title={data.title}
+        narration={data.narration}
+        scenario={data.scenario}
+        buttonLabel="I've observed the scene"
+        onContinue={() => setScenarioRead(true)}
+      />
+    );
+  }
+
   return (
-    <div className="p-4 md:p-8 flex-1 flex items-center">
-      <section className="w-full bg-white border border-slate-200 rounded-3xl shadow-sm p-6 md:p-9">
+    <div className="p-0 md:p-8 flex-1 flex">
+      <section className="min-h-[calc(100dvh-58px)] md:min-h-0 w-full bg-white border-0 md:border border-slate-200 rounded-none md:rounded-3xl shadow-none md:shadow-sm p-6 md:p-9 flex flex-col">
+        <div>
         <p className="text-xs font-bold uppercase tracking-wider text-purple-700 mb-3">Tag each observation</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">{data.title}</h1>
         {data.narration && <p className="mt-3 text-slate-500">{data.narration}</p>}
-        {data.scenario && <div className="mt-5 rounded-2xl bg-purple-50 border border-purple-100 p-5 text-slate-700">{data.scenario}</div>}
+        <ScenarioReview scenario={data.scenario} />
         <h2 className="mt-6 mb-4 font-bold text-slate-900">{data.instruction}</h2>
+        </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 mt-auto">
           {data.items.map((item) => (
             <article key={item.id} className="rounded-2xl border border-slate-200 p-4">
               <p className="font-medium text-slate-800 mb-3">{item.text}</p>
@@ -51,7 +67,6 @@ const Tags = ({ data, next, deferFeedback = false }) => {
                       key={label}
                       disabled={submitted}
                       onClick={() => {
-                        unlockAudio();
                         playSound("tap");
                         setAnswers((current) => ({ ...current, [item.id]: label }));
                       }}
@@ -76,7 +91,7 @@ const Tags = ({ data, next, deferFeedback = false }) => {
           playSound("continueEnabled");
           next(result);
         } : submit}
-          className="mt-6 w-full rounded-xl bg-purple-600 disabled:bg-slate-300 text-white font-bold py-3.5">
+          className="mt-6 w-full rounded-xl bg-purple-600 disabled:bg-slate-300 text-white font-bold py-3.5 shrink-0">
           {submitted ? "Continue" : "Check answers"}
         </button>
       </section>

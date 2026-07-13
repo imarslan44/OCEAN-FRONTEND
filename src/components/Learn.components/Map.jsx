@@ -1,12 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BookOpen, Dumbbell, Lock } from 'lucide-react';
-import useSound from 'use-sound';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getLearnProgress, getLevelProgress, saveLevelProgress } from '../../utils/learnProgress';
-
-const clickSoundUrl = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=';
 
 const IsometricNode = ({ state }) => {
   // state: 'completed', 'active', 'locked'
@@ -60,7 +57,6 @@ const IsometricNode = ({ state }) => {
 };
 
 export const Map = ({ skillsData = [] }) => {
-  const [playClick] = useSound(clickSoundUrl, { volume: 0.5 });
   const [selectedLevel, setSelectedLevel] = useState(null);
   const activeNodeRef = useRef(null);
   const navigate = useNavigate();
@@ -158,7 +154,6 @@ export const Map = ({ skillsData = [] }) => {
                         className={`flex items-center gap-8 cursor-pointer group w-full ${isEven ? 'flex-row' : 'flex-row-reverse'}`}
                         onClick={() => {
                           if (!isLocked) {
-                            playClick();
                             setSelectedLevel(level);
                           }
                         }}
@@ -200,7 +195,6 @@ export const Map = ({ skillsData = [] }) => {
                </div>
                <button 
                   onClick={() => {
-                    playClick();
                     const levelProgress = getLevelProgress(userId, selectedLevel.skillId, selectedLevel.id);
                     saveLevelProgress(userId, selectedLevel.skillId, selectedLevel.id, levelProgress);
                     navigate(`/learn/${selectedLevel.skillId}/level/${selectedLevel.id}`);

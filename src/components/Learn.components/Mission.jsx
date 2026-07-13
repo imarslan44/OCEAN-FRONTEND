@@ -3,7 +3,7 @@ import { BookOpenCheck, Flag, Lightbulb } from "lucide-react";
 import MultipleChoice from "./Mcq";
 import Tags from "./Tags";
 import Sort from "./sort";
-import { playSound, unlockAudio } from "../../assets/soundEffects";
+import { playSound } from "../../assets/soundEffects";
 
 const Mission = ({ data, next }) => {
   const [started, setStarted] = useState(false);
@@ -17,8 +17,6 @@ const Mission = ({ data, next }) => {
   };
 
   const beginMission = () => {
-    unlockAudio();
-    playSound("tap");
     setStarted(true);
   };
 
@@ -30,8 +28,8 @@ const Mission = ({ data, next }) => {
 
   if (!started) {
     return (
-      <div className="p-4 md:p-8 flex-1 flex items-center">
-        <section className="w-full rounded-3xl bg-slate-900 text-white p-7 md:p-10 shadow-xl">
+      <div className="p-0 md:p-8 flex-1 flex">
+        <section className="min-h-[calc(100dvh-58px)] md:min-h-0 w-full rounded-none md:rounded-3xl bg-slate-900 text-white p-7 md:p-10 shadow-none md:shadow-xl flex flex-col">
           <div className="flex items-center gap-2 text-purple-300 text-xs font-bold uppercase tracking-widest mb-4">
             <Flag size={18} /> Mission
           </div>
@@ -41,7 +39,7 @@ const Mission = ({ data, next }) => {
             <span className="font-bold text-purple-200">Objective</span>
             <p className="mt-1 text-slate-200">{data.objective}</p>
           </div>
-          <button type="button" onClick={beginMission} className="mt-7 w-full rounded-xl bg-purple-500 hover:bg-purple-400 py-4 font-bold">
+          <button type="button" onClick={beginMission} className="mt-auto pt-4 w-full rounded-xl bg-purple-500 hover:bg-purple-400 py-4 font-bold shrink-0">
             Begin mission
           </button>
         </section>

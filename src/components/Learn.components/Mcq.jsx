@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { CheckCircle2, Circle, Layers3 } from "lucide-react";
-import { playSound, unlockAudio } from "../../assets/soundEffects";
+import { playSound } from "../../assets/soundEffects";
+import ScenarioStage, { ScenarioReview } from "./ScenarioStage";
 
 const getChoiceData = (data) => ({
   options: data?.input?.options ?? data?.options ?? [],
@@ -18,6 +19,8 @@ const MultipleChoice = ({ data, next, deferFeedback = false }) => {
     options.filter((option) => option.isCorrect).length > 1;
   const [selectedIds, setSelectedIds] = useState([]);
   const [submitted, setSubmitted] = useState(false);
+  const hasScenario = Boolean(scenario || sceneA || sceneB);
+  const [scenarioRead, setScenarioRead] = useState(!hasScenario);
 
   const correctIds = useMemo(
     () => options.filter((option) => option.isCorrect).map((option) => option.id),
@@ -30,7 +33,6 @@ const MultipleChoice = ({ data, next, deferFeedback = false }) => {
 
   const toggleOption = (id) => {
     if (submitted) return;
-    unlockAudio();
     playSound("tap");
     setSelectedIds((current) =>
       isMultiSelect
@@ -63,9 +65,25 @@ const MultipleChoice = ({ data, next, deferFeedback = false }) => {
     setSubmitted(true);
   };
 
+  if (!scenarioRead) {
+    return (
+      <ScenarioStage
+        title={data.title}
+        narration={data.narration}
+        objective={data.objective}
+        scenario={scenario}
+        sceneA={sceneA}
+        sceneB={sceneB}
+        buttonLabel={sceneA || sceneB ? "I've reviewed both scenes" : "I've observed the scene"}
+        onContinue={() => setScenarioRead(true)}
+      />
+    );
+  }
+
   return (
-    <div className="p-4 md:p-8 flex-1 flex items-center">
-      <section className="w-full bg-white border border-slate-200 rounded-3xl shadow-sm p-6 md:p-9">
+    <div className="p-0 md:p-8 flex-1 flex">
+      <section className="min-h-[calc(100dvh-58px)] md:min-h-0 w-full bg-white border-0 md:border border-slate-200 rounded-none md:rounded-3xl shadow-none md:shadow-sm p-6 md:p-9 flex flex-col">
+        <div>
         <div className="flex items-center gap-2 text-purple-700 text-xs font-bold uppercase tracking-wider mb-3">
           <Layers3 size={17} />
           {isMultiSelect ? "Select all that apply" : "Choose one answer"}
@@ -74,24 +92,11 @@ const MultipleChoice = ({ data, next, deferFeedback = false }) => {
         {data.narration && <p className="mt-3 text-slate-500">{data.narration}</p>}
         {data.objective && <p className="mt-3 text-sm text-slate-500">{data.objective}</p>}
 
-        {(sceneA || sceneB) && (
-          <div className="grid md:grid-cols-2 gap-3 mt-6">
-            {[sceneA, sceneB].filter(Boolean).map((scene) => (
-              <article key={scene.title} className="rounded-2xl bg-slate-50 border border-slate-200 p-5">
-                <h2 className="font-bold text-slate-800 mb-2">{scene.title}</h2>
-                <p className="text-slate-600 leading-relaxed">{scene.description}</p>
-              </article>
-            ))}
-          </div>
-        )}
-        {scenario && (
-          <div className="mt-6 rounded-2xl bg-purple-50 border border-purple-100 p-5 text-slate-700 leading-relaxed">
-            {scenario}
-          </div>
-        )}
+        <ScenarioReview scenario={scenario} sceneA={sceneA} sceneB={sceneB} />
         {question && <h2 className="mt-6 mb-4 text-lg font-bold text-slate-900">{question}</h2>}
+        </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 mt-auto">
           {options.map((option) => {
             const selected = selectedIds.includes(option.id);
             const showCorrect = submitted && option.isCorrect;
@@ -137,7 +142,7 @@ const MultipleChoice = ({ data, next, deferFeedback = false }) => {
             playSound("continueEnabled");
             next(result);
           } : submit}
-          className="mt-6 w-full rounded-xl bg-purple-600 disabled:bg-slate-300 text-white font-bold py-3.5 transition hover:bg-purple-700"
+          className="mt-6 w-full rounded-xl bg-purple-600 disabled:bg-slate-300 text-white font-bold py-3.5 transition hover:bg-purple-700 shrink-0"
         >
           {submitted ? "Continue" : "Check answer"}
         </button>

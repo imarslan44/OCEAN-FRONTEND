@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import Introduction from "../components/Learn.components/Intro";
 import MultipleChoice from "../components/Learn.components/Mcq";
 import Mission from "../components/Learn.components/Mission";
 import Sort from "../components/Learn.components/sort";
 import Tags from "../components/Learn.components/Tags";
-import { playSound } from "../assets/soundEffects";
 import { useAuth } from "../context/AuthContext";
 import { completeLevel, getLevelProgress, saveLevelProgress } from "../utils/learnProgress";
 import { getLevelById } from "../SKILLS/SKILLS.JS";
@@ -62,6 +62,21 @@ const ExercisePlayer = ({ skillId, levelId, userId }) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  const goBack = () => {
+    if (currentIndex === 0) {
+      navigate("/learn");
+      return;
+    }
+
+    const previousIndex = currentIndex - 1;
+    setCurrentIndex(previousIndex);
+    saveLevelProgress(userId, skill.id, level.id, {
+      exerciseIndex: previousIndex,
+      responses,
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   if (currentIndex >= exercises.length) {
     return (
       <div className="min-h-screen grid place-items-center bg-slate-50 p-6">
@@ -70,7 +85,6 @@ const ExercisePlayer = ({ skillId, levelId, userId }) => {
           <h1 className="text-3xl font-extrabold text-slate-900">Level complete!</h1>
           <p className="mt-3 text-slate-500">Your progress has been saved on this device.</p>
           <button type="button" onClick={() => {
-            playSound("complete");
             completeLevel(userId, skill, level);
             navigate("/learn");
           }} className="mt-7 w-full rounded-xl bg-purple-600 text-white font-bold py-3.5">
@@ -98,7 +112,14 @@ const ExercisePlayer = ({ skillId, levelId, userId }) => {
           <div className="h-full bg-purple-600 transition-all" style={{ width: `${progress}%` }} />
         </div>
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <button type="button" onClick={() => navigate("/learn")} className="text-slate-500 hover:text-slate-900">✕</button>
+          <button
+            type="button"
+            onClick={goBack}
+            aria-label={currentIndex === 0 ? "Return to Learn" : "Previous exercise"}
+            className="p-2 -ml-2 rounded-full text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition"
+          >
+            <ArrowLeft size={21} />
+          </button>
           <span className="font-bold text-slate-700">{level.title}</span>
           <span className="text-xs font-bold text-slate-400">{currentIndex + 1} / {exercises.length}</span>
         </div>

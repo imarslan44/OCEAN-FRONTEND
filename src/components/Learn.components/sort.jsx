@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { ArrowDown, ArrowUp, GripVertical } from "lucide-react";
-import { playSound, unlockAudio } from "../../assets/soundEffects";
+import { playSound } from "../../assets/soundEffects";
+import ScenarioStage, { ScenarioReview } from "./ScenarioStage";
 
 const Sort = ({ data, next, deferFeedback = false }) => {
   const [orderedItems, setOrderedItems] = useState(() => [...data.items].reverse());
   const [submitted, setSubmitted] = useState(false);
+  const [scenarioRead, setScenarioRead] = useState(!data.scenario);
 
   const move = (index, offset) => {
     if (submitted) return;
     const target = index + offset;
     if (target < 0 || target >= orderedItems.length) return;
-    unlockAudio();
-    playSound("tap");
+    playSound("sort");
     setOrderedItems((current) => {
       const copy = [...current];
       [copy[index], copy[target]] = [copy[target], copy[index]];
@@ -40,15 +41,30 @@ const Sort = ({ data, next, deferFeedback = false }) => {
     else setSubmitted(true);
   };
 
+  if (!scenarioRead) {
+    return (
+      <ScenarioStage
+        title={data.title}
+        narration={data.narration}
+        scenario={data.scenario}
+        buttonLabel="I've noted the scenario"
+        onContinue={() => setScenarioRead(true)}
+      />
+    );
+  }
+
   return (
-    <div className="p-4 md:p-8 flex-1 flex items-center">
-      <section className="w-full bg-white border border-slate-200 rounded-3xl shadow-sm p-6 md:p-9">
+    <div className="p-0 md:p-8 flex-1 flex">
+      <section className="min-h-[calc(100dvh-58px)] md:min-h-0 w-full bg-white border-0 md:border border-slate-200 rounded-none md:rounded-3xl shadow-none md:shadow-sm p-6 md:p-9 flex flex-col">
+        <div>
         <p className="text-xs font-bold uppercase tracking-wider text-purple-700 mb-3">Put in order</p>
         <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900">{data.title}</h1>
         {data.narration && <p className="mt-3 text-slate-500">{data.narration}</p>}
+        <ScenarioReview scenario={data.scenario} />
         <h2 className="mt-5 mb-4 font-bold text-slate-900">{data.instruction}</h2>
+        </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 mt-auto">
           {orderedItems.map((item, index) => {
             const correct = item.correctPosition === index + 1;
             return (
@@ -76,7 +92,7 @@ const Sort = ({ data, next, deferFeedback = false }) => {
           playSound("continueEnabled");
           next(result);
         } : submit}
-          className="mt-6 w-full rounded-xl bg-purple-600 text-white font-bold py-3.5">
+          className="mt-6 w-full rounded-xl bg-purple-600 text-white font-bold py-3.5 shrink-0">
           {submitted ? "Continue" : "Check order"}
         </button>
       </section>

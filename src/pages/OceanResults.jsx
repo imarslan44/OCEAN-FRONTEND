@@ -217,7 +217,7 @@ export default function OceanResults() {
           })}
           
           {/* Navigation Controls */}
-          <div className="absolute bottom-4 w-full flex justify-between px-8 max-w-md z-30 pointer-events-none">
+          <div className="absolute bottom-4 w-full flex justify-center gap-3 px-8 max-w-md z-30 pointer-events-none">
             <button 
               className={`w-12 h-12 rounded-full bg-black/20 text-white flex items-center justify-center backdrop-blur-sm pointer-events-auto transition-opacity ${currentCardIndex === 0 ? 'opacity-0' : 'opacity-100 hover:bg-black/40'}`}
               onClick={(e) => { e.stopPropagation(); setCurrentCardIndex(Math.max(0, currentCardIndex - 1)); }}

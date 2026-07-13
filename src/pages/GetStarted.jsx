@@ -181,7 +181,7 @@ export default function GetStarted() {
               alt="Abstract OCEAN personality profile visualization"
               className="absolute inset-0 h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
+            {/* <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-gutter text-on-primary">
               <div className="mb-3 flex items-center gap-2 opacity-90">
                 <span className="material-symbols-outlined !text-[18px]">insights</span>
@@ -192,8 +192,8 @@ export default function GetStarted() {
               <p className="max-w-sm text-2xl font-bold leading-snug">
                 Your profile becomes more useful when it's connected to action.
               </p>
-            </div>
-          </div>
+            </div> */}
+          </div> 
         </section>
 
         {/* ══ WHAT IS THE BIG FIVE? ══ */}

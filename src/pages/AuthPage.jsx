@@ -8,7 +8,7 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const { signup, login, updateUser, getUserNextStep } = useAuth();
 
-  const [mode, setMode] = useState('signup');
+  const [mode, setMode] = useState('login');
   const [step, setStep] = useState('A');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -131,7 +131,18 @@ const AuthPage = () => {
         <Card className="w-full max-w-md p-gutter md:p-stack-lg">
 
           <div className="mb-stack-lg">
-            <div className="flex gap-stack-md mb-stack-sm border-b border-outline-variant/30">
+            <div className="flex justify-center gap-stack-md mb-stack-sm border-b border-outline-variant/30">
+            <button
+                type="button"
+                onClick={() => handleModeChange('login')}
+                className={`pb-stack-sm font-label-sm text-label-sm transition-all pb-2 cursor-pointer ${
+                  mode === 'login'
+                    ? 'border-b-2 border-primary text-primary font-bold'
+                    : 'text-outline hover:text-primary'
+                }`}
+              >
+                Log In
+              </button>
               <button
                 type="button"
                 onClick={() => handleModeChange('signup')}
@@ -143,17 +154,7 @@ const AuthPage = () => {
               >
                 Sign Up
               </button>
-              <button
-                type="button"
-                onClick={() => handleModeChange('login')}
-                className={`pb-stack-sm font-label-sm text-label-sm transition-all pb-2 cursor-pointer ${
-                  mode === 'login'
-                    ? 'border-b-2 border-primary text-primary font-bold'
-                    : 'text-outline hover:text-primary'
-                }`}
-              >
-                Log In
-              </button>
+              
             </div>
           </div>
 
@@ -356,7 +357,7 @@ const AuthPage = () => {
                       </button>
                     </div>
                   </div>
-
+                  
                   <div className="pt-stack-sm mt-2">
                     <Button
                       type="submit"

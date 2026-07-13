@@ -1,7 +1,6 @@
-import React from "react";
 import { motion } from "framer-motion";
 import { Clock, Target, Lightbulb, ArrowRight, BookOpen } from "lucide-react";
-import { playSound, unlockAudio } from "../../assets/soundEffects";
+import { playSound } from "../../assets/soundEffects";
 
 const Introduction = ({ intro, next }) => {
   // Use demo data if no intro prop is provided, otherwise use the passed intro data
@@ -98,7 +97,6 @@ const Introduction = ({ intro, next }) => {
             <div className="shrink-0 pt-2 md:pt-0 w-full md:w-auto">
               <button 
                 onClick={() => {
-                  unlockAudio();
                   playSound("continueEnabled");
                   next();
                 }}

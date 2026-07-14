@@ -18,15 +18,18 @@ const NavBar = () => {
           <span className="material-symbols-outlined">psychology</span>
           <span className="font-label-sm text-[11px] mt-1">Results</span>
         </NavLink>
+
+        <NavLink to="/compare" className={({ isActive }) => isActive ? activeNavStyle : `flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
+          <span className="material-symbols-outlined" style={{}}>compare_arrows</span>
+          <span className="font-label-sm text-[11px] mt-1">Compare</span>
+        </NavLink> 
+        
         <NavLink to="/learn" className={({ isActive }) => isActive ? activeNavStyle : `flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
           <span className="material-symbols-outlined">school</span>
-          <span className="font-label-sm text-[11px] mt-1">Learn</span>
+          <span className="font-label-sm text-[11px] mt-1">Skills</span>
         </NavLink>
         
-        <NavLink to="/profile" className={({ isActive }) => isActive ? activeNavStyle : `flex flex-col items-center justify-center text-outline hover:bg-surface-container-low transition-all active:scale-95 duration-150 p-2 rounded`}>
-          <span className="material-symbols-outlined" style={{}}>account_circle</span>
-          <span className="font-label-sm text-[11px] mt-1">Profile</span>
-        </NavLink> 
+        
       </nav>
   );
 };

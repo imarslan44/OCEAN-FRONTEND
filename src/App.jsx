@@ -25,6 +25,7 @@ import CompareIntro from './pages/compare/CompareIntro';
 import InviteLanding from './pages/compare/InviteLanding';
 import CompareProcessing from './pages/compare/CompareProcessing';
 import CompareReport from './pages/compare/CompareReport';
+import CompareDashboard from './pages/CompareDashboard';
 import { useAuth } from './context/AuthContext';
 
 function SplashRoute() {
@@ -114,13 +115,14 @@ export default function App() {
         <Route path="/compare/processing/:token" element={<RequireAuth><RequireProfileReady><CompareProcessing /></RequireProfileReady></RequireAuth>} />
         <Route path="/compare/report/:token" element={<RequireAuth><RequireProfileReady><CompareReport /></RequireProfileReady></RequireAuth>} />
         <Route path="/learn/:skillId/level/:levelId" element={<RequireAuth><RequireProfileReady><ExerciseContainer /></RequireProfileReady></RequireAuth>} />
+        <Route path="/results" element={<RequireAuth><RequireProfileReady><OceanResults /></RequireProfileReady></RequireAuth>} />
 
         {/* Routes with the main layout */}
         <Route element={<MainLayout />}>
           <Route path="/home" element={<RequireAuth redirectTo="/get-started"><RequireHomeReady><HomeDashboard /></RequireHomeReady></RequireAuth>} />
           <Route path="/learn" element={<RequireAuth><RequireProfileReady><LearnDashboard /></RequireProfileReady></RequireAuth>} />
           <Route path="/profile" element={<RequireAuth><RequireProfileReady><ProfilePage /></RequireProfileReady></RequireAuth>} />
-          <Route path="/results" element={<RequireAuth><RequireProfileReady><OceanResults /></RequireProfileReady></RequireAuth>} />
+          <Route path="/compare" element={<RequireAuth><RequireProfileReady><CompareDashboard /></RequireProfileReady></RequireAuth>} />
         </Route>
 
         {/* fallback to splash for unknown routes */}

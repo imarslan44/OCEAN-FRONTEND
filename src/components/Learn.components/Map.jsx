@@ -109,7 +109,7 @@ export const Map = ({ skillsData = [] }) => {
           <div key={skill.id || skillIndex} className="w-full flex flex-col md:flex-row mb-24 md:items-end md:justify-center relative">
             
             {/* Skill Card (Desktop Left / Mobile Bottom) */}
-            <div className="w-full md:w-[340px] md:sticky md:bottom-24 bg-white rounded-[20px] p-6 mb-12 md:mb-0 md:mr-16 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-100 shrink-0">
+            <div className="order-2  bg-red-500   md:order-1 w-full md:w-[340px] md:sticky md:bottom-24 bg-white rounded-[20px] p-6 mt-12 md:mt-0 md:mr-16 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-500 shrink-0">
               <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-5">
                  <BookOpen className="text-purple-600" size={32} />
               </div>
@@ -122,14 +122,12 @@ export const Map = ({ skillsData = [] }) => {
                  <div className="flex items-center gap-1.5"><Dumbbell size={16}/> {exerciseCount} Exercises</div>
               </div>
             </div>
-            
+
             {/* Path Column */}
-            <div className="flex-1 flex flex-col items-center max-w-[320px]">
+            <div className="order-1 md:order-2 flex-1 flex flex-col items-center max-w-[420px] px-6 ">
               
               {/* Path Nodes (Reversed for Bottom-to-Up) */}
               <div className="relative flex flex-col-reverse items-center w-full">
-                
-                {/* Topic Pill (Black Card at the BOTTOM of the levels) */}
                 <div className="w-full mb-12 mt-6 z-20">
                   <div className="bg-[#1e293b] rounded-2xl border-2 border-purple-500 py-3 px-4 flex flex-col items-center shadow-lg">
                     <span className="text-[11px] font-bold text-purple-400 tracking-[0.2em] uppercase mb-1">

@@ -30,9 +30,9 @@ const Introduction = ({ intro, next }) => {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center items-center p-4 md:p-8">
+    <div className="min-h-[70vh] flex flex-col justify-center items-center p-4 max-sm:p-0 md:p-8">
       <motion.div 
-        className="w-full max-w-2xl bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100"
+        className="w-full max-w-2xl bg-white  rounded-3xl max-sm:rounded-none shadow-xl overflow-hidden border border-slate-100"
         variants={containerVariants}
         initial="hidden"
         animate="visible"

@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import DashboardWaitingCard from './compare/DashboardWaitingCard';
 
 export default function HomeDashboard() {
   const { user, hasCompletedTest } = useAuth();
   const navigate = useNavigate();
   const [animate, setAnimate] = useState(false);
-  const [invites, setInvites] = useState([]);
   const [insightData, setInsightData] = useState(null);
-  const [showAllComparisons, setShowAllComparisons] = useState(false);
 
   const profile = user?.profile || {};
   const result = profile.personalityResult || null;
@@ -27,17 +24,9 @@ export default function HomeDashboard() {
       if (token) {
         void (async () => {
           try {
-            const [inviteRes, insightRes] = await Promise.all([
-              fetch('http://localhost:5000/api/v1/invites/me', {
-                headers: { 'Authorization': `Bearer ${token}` }
-              }),
-              fetch('/api/v1/tests/completed', {
-                headers: { 'Authorization': `Bearer ${token}` }
-              })
-            ]);
-
-            const inviteData = await inviteRes.json();
-            if (inviteData.invites) setInvites(inviteData.invites);
+            const insightRes = await fetch('/api/v1/tests/completed', {
+              headers: { 'Authorization': `Bearer ${token}` }
+            });
 
             if (insightRes.ok) {
               const insightResponse = await insightRes.json();
@@ -54,22 +43,6 @@ export default function HomeDashboard() {
 
     return () => clearTimeout(timer);
   }, [user, hasCompletedTest]);
-
-  const handleRemoveInvite = async (token) => {
-    try {
-      const accessToken = localStorage.getItem('ocean_token') || localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/v1/invites/${token}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${accessToken}` }
-      });
-
-      if (res.ok) {
-        setInvites(prev => prev.filter(invite => invite.token !== token));
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const scores = insightData?.scores ? {
     O: insightData.scores.O || 0,
@@ -119,11 +92,11 @@ export default function HomeDashboard() {
               
             </div> */}
             <button
-              onClick={() => navigate('/test-intro')}
-              className=" absolute top-0 right-0 transparent   text-primary bg-surface-container px-2 py-1 rounded-sm font-label-sm text-label-sm flex items-center gap-0 font-semibold  hover:bg-primary/90 hover:text-on-primary transition-all active:scale-95 cursor-pointer text-nowrap"
+              onClick={() => navigate('/profile')}
+              className="absolute top-0 right-0 bg-surface-container w-10 h-10 flex items-center justify-center rounded-full text-primary hover:bg-primary/90 hover:text-on-primary transition-all active:scale-95 cursor-pointer shadow-sm"
+              aria-label="Profile"
             >
-              <span className="material-symbols-outlined text-[14px] ">play_arrow</span>
-              {completedTest ? 'Take New Test' : 'Start Test'}
+              <span className="material-symbols-outlined text-[20px]">account_circle</span>
             </button>
           </div>
         </section>
@@ -153,132 +126,8 @@ export default function HomeDashboard() {
           </section>
         )}
 
-        {/* OCEAN Summary Card (Updated to feature #1 Combo) */}
-        <section className="bg-surface-container-lowest p-gutter rounded-xl border border-primary/10 transition-all hover:border-primary/20 shadow-sm cursor-pointer group" onClick={() => navigate(completedTest ? '/results' : '/test-intro')}>
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-stack-md relative">
-            <div className="space-y-unit w-full md:w-[60%] relative">
-              <h3 className="font-headline-md text-headline-md font-bold">
-                {completedTest ? 'Your Core Dynamic' : 'Complete Your Baseline'}
-              </h3>
-              <p className="font-display-sm text-primary font-bold mt-1">
-                {archetypeTitle}
-              </p>
-              {primaryCombo && completedTest && (
-                <p className="font-body-md text-on-surface-variant max-w-md mt-2 italic">
-                  "{primaryCombo.summary}"
-                </p>
-              )}
-              {!completedTest && (
-                <p className="font-body-md text-on-surface-variant max-w-md mt-2">
-                  The assessment unlocks your results story, trait scores, and comparison readiness.
-                </p>
-              )}
-
-              {/* positioning this button to top right of the card */}
-              <button className="mt-4 text-secondary font-label-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all absolute -top-4 right-[0px]">
-
-                {completedTest ? 'View Full Story' : 'Take Test'}
-                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-              </button>
-            </div>
-
-            {/* Mini Vertical Bar Chart */}
-            <div className="flex items-end gap-4 h-32 px-4 md:border-l border-outline/10 pt-4 md:pt-0">
-              {[
-                { label: 'O', val: scores.O, active: true },
-                { label: 'C', val: scores.C, active: true },
-                { label: 'E', val: scores.E, active: false },
-                { label: 'A', val: scores.A, active: true },
-                { label: 'N', val: scores.N, active: false },
-              ].map((trait, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-2">
-                  <div className="h-24 w-11 md:w-11 bg-surface-container-high rounded-t-sm overflow-hidden flex flex-col justify-end">
-                    <div
-                      className={`w-full bg-primary rounded-t-sm ${!trait.active ? 'opacity-40' : ''} transition-all duration-1000 ease-out`}
-                      style={{ height: animate ? `${trait.val || 5}%` : '0%' }}
-                    ></div>
-                  </div>
-                  <span className="font-label-sm text-[11px] font-bold">{trait.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {invites.length > 0 && (
-          <section className="space-y-stack-md">
-            <div className="flex items-center justify-between gap-2">
-              <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Compare Invites</h3>
-              {invites.length > 2 && (
-                <button
-                  type="button"
-                  onClick={() => setShowAllComparisons(prev => !prev)}
-                  className="flex items-center gap-1 text-sm font-semibold text-primary hover:text-primary/80 transition-colors"
-                >
-                  <span>{showAllComparisons ? 'Show Less' : 'Show All'}</span>
-                  <span className={`material-symbols-outlined text-[16px] transition-transform duration-200 ${showAllComparisons ? 'rotate-180' : ''}`}>
-                    expand_more
-                  </span>
-                </button>
-              )}
-            </div>
-            <div className="flex flex-col gap-4">
-              {invites.slice(0, showAllComparisons ? invites.length : 2).map(invite => (
-                <DashboardWaitingCard
-                  key={invite._id}
-                  invite={invite}
-                  currentUserId={user?.id}
-                  onRemove={() => handleRemoveInvite(invite.token)}
-                />
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Quick Actions Grid */}
-        <section className="space-y-stack-md">
-          <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Quick Actions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
-            {/* Action 1 */}
-            <button className="group flex items-center justify-between p-stack-md bg-primary text-on-primary rounded-lg transition-all active:scale-[0.98] text-left shadow-md hover:bg-primary/90">
-              <div className="flex items-center gap-stack-md">
-                <div className="w-12 h-12 flex items-center justify-center bg-white/10 rounded-full">
-                  <span className="material-symbols-outlined text-[28px]">explore</span>
-                </div>
-                <div>
-                  <span className="block font-headline-md text-[18px] font-bold mb-1">Explore People</span>
-                  <span className="block font-body-md text-sm opacity-70">Find compatible archetypes</span>
-                </div>
-              </div>
-              <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
-            </button>
-            {/* Action 2 */}
-            <button
-              onClick={() => navigate(completedTest ? '/compare/intro' : '/test-intro')}
-              className={`group flex items-center justify-between p-stack-md bg-surface-container-high border border-outline/10 text-on-surface rounded-lg transition-all active:scale-[0.98] text-left ${completedTest ? 'hover:bg-surface-dim' : 'opacity-75'}`}
-            >
-              <div className="flex items-center gap-stack-md">
-                <div className="w-12 h-12 flex items-center justify-center bg-primary/5 rounded-full text-primary">
-                  <span className="material-symbols-outlined text-[28px]">compare_arrows</span>
-                </div>
-                <div>
-                  <span className="block font-headline-md text-[18px] font-bold mb-1">
-                    {completedTest ? 'Compare with Someone' : 'Compare Locked'}
-                  </span>
-                  <span className="block font-body-md text-sm text-on-surface-variant">
-                    {completedTest ? 'Analyze relationship dynamics' : 'Take your test to compare profiles'}
-                  </span>
-                </div>
-              </div>
-              <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">
-                {completedTest ? 'chevron_right' : 'lock'}
-              </span>
-            </button>
-          </div>
-        </section>
-
-        {/* Dynamic Insights Carousel */}
-        <section className="space-y-stack-md pb-12">
+          {/* Dynamic Insights Carousel */}
+        <section className="space-y-stack-md ">
           <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Your Insights</h3>
 
           {carouselCombos.length > 0 ? (
@@ -314,6 +163,80 @@ export default function HomeDashboard() {
             </div>
           )}
         </section>
+
+        {/* OCEAN Summary Card (Updated to feature #1 Combo) */}
+        <section className="bg-surface-container-lowest p-gutter rounded-xl border border-primary/10 transition-all hover:border-primary/20 shadow-sm cursor-pointer group" onClick={() => navigate(completedTest ? '/results' : '/test-intro')}>
+          <div className="flex  flex-col md:flex-row justify-between items-start md:items-center gap-stack-md relative">
+            <div className="space-y-unit w-full md:w-[60%] relative">
+              <h3 className="font-headline-md text-headline-md font-bold max-sm:hidden">
+                {completedTest ? 'Your Core Dynamic' : 'Complete Your Baseline'}
+              </h3>
+              <p className="font-display-sm text-primary font-bold mt-1 max-sm:hidden">
+                {archetypeTitle}
+              </p>
+              {primaryCombo && completedTest && (
+                <p className="font-body-md text-on-surface-variant max-w-md mt-2 italic max-sm:hidden">
+                  "{primaryCombo.summary}"
+                </p>
+              )}
+              {!completedTest && (
+                <p className="font-body-md text-on-surface-variant max-w-md mt-2">
+                  The assessment unlocks your results story, trait scores, and comparison readiness.
+                </p>
+              )}
+
+              {/* positioning this button to top right of the card */}
+              <button className=" text-secondary/70 font-label-sm font-bold flex items-center gap-1 group-hover:gap-2 transition-all absolute -top-4 right-[0px]">
+
+                {completedTest ? 'View Full Story' : 'Take Test'}
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </button>
+            </div>
+
+            {/* Mini Vertical Bar Chart */}
+            <div className="flex items-end gap-4 h-44 px-4 md:border-l border-outline/10 pt-4 md:pt-0">
+              {[
+                { label: 'O', val: scores.O, active: true },
+                { label: 'C', val: scores.C, active: true },
+                { label: 'E', val: scores.E, active: false },
+                { label: 'A', val: scores.A, active: true },
+                { label: 'N', val: scores.N, active: false },
+              ].map((trait, idx) => (
+                <div key={idx} className="flex flex-col items-center gap-2">
+                  <div className="h-38 w-12 md:w-11 bg-surface-container-high rounded-t-sm overflow-hidden flex flex-col justify-end">
+                    <div
+                      className={`w-full bg-primary rounded-t-sm ${!trait.active ? 'opacity-40' : ''} transition-all duration-1000 ease-out`}
+                      style={{ height: animate ? `${trait.val || 5}%` : '0%' }}
+                    ></div>
+                  </div>
+                  <span className="font-label-sm text-[11px] font-bold">{trait.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Quick Actions Grid */}
+        <section className="space-y-stack-md">
+          <h3 className="font-label-sm uppercase tracking-widest text-outline font-bold">Quick Actions</h3>
+          <div className="grid grid-cols-1 gap-gutter">
+            {/* Action 1 */}
+            <button className="group flex items-center justify-between p-stack-md bg-primary text-on-primary rounded-lg transition-all active:scale-[0.98] text-left shadow-md hover:bg-primary/90">
+              <div className="flex items-center gap-stack-md">
+                <div className="w-12 h-12 flex items-center justify-center bg-white/10 rounded-full">
+                  <span className="material-symbols-outlined text-[28px]">explore</span>
+                </div>
+                <div>
+                  <span className="block font-headline-md text-[18px] font-bold mb-1">Explore People</span>
+                  <span className="block font-body-md text-sm opacity-70">Find compatible archetypes</span>
+                </div>
+              </div>
+              <span className="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+            </button>
+          </div>
+        </section>
+
+      
       </main>
 
       <style>{`

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function OceanResults() {
   const navigate = useNavigate();
@@ -11,6 +12,8 @@ export default function OceanResults() {
   const [isCheckingResults, setIsCheckingResults] = useState(true);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [expandedTraits, setExpandedTraits] = useState({});
+  const [activeWatchOut, setActiveWatchOut] = useState(null);
+  const [isDeepDiveVisible, setIsDeepDiveVisible] = useState(false);
 
   // Fetch from backend (source of truth for calculations)
   useEffect(() => {
@@ -137,14 +140,16 @@ export default function OceanResults() {
     }))
   ];
 
+  const currentCard = storyCards[currentCardIndex] || storyCards[0];
+
   return (
-    <div className="bg-background min-h-screen flex flex-col font-body-md text-on-background pb-24">
+    <div className={`min-h-screen flex flex-col font-body-md pb-24 transition-colors duration-500 ease-in-out ${currentCard.color} ${currentCard.textColor}`}>
       {/* Top App Bar */}
-      <header className="w-full sticky top-0 z-50 bg-background/80 backdrop-blur-md">
+      <header className="w-full sticky top-0 z-50 bg-black/5 backdrop-blur-md border-b border-black/5">
         <div className="flex items-center justify-between px-margin-mobile py-4 max-w-container-max mx-auto">
           <Link to="/home" className="flex items-center gap-2 cursor-pointer active:opacity-70">
-            <span className="material-symbols-outlined text-primary text-[24px]">psychology</span>
-            <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-primary font-bold">OCEAN</span>
+            <span className="material-symbols-outlined text-gray-600 text-[24px]">psychology</span>
+            <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-gray-600 font-bold">OCEAN</span>
           </Link>
         </div>
       </header>
@@ -152,7 +157,7 @@ export default function OceanResults() {
       <main className="flex-grow w-full mx-auto">
         
         {/* ABOVE THE FOLD: The Swipeable Story */}
-        <section className="relative w-full h-[70vh] md:h-[600px] flex items-center justify-center bg-surface-container-lowest overflow-hidden">
+        <section className="relative w-full h-[84vh] md:h-[600px] flex items-center justify-center overflow-hidden">
           {storyCards.map((card, idx) => {
             const isCurrent = currentCardIndex === idx;
             const isPrev = idx < currentCardIndex;
@@ -161,7 +166,7 @@ export default function OceanResults() {
             return (
               <div 
                 key={idx}
-                className={`absolute w-[90%] max-w-md h-[85%] rounded-2xl p-8 flex flex-col justify-center shadow-xl transition-all duration-500 ease-in-out cursor-pointer ${card.color} ${card.textColor}
+                className={`absolute w-full h-full rounded-none md:w-[90%] md:max-w-md md:h-[85%] md:rounded-2xl p-6 md:p-8 pt-16 md:pt-8 flex flex-col justify-center shadow-xl transition-all duration-500 ease-in-out cursor-pointer overflow-hidden ${card.color} ${card.textColor}
                   ${isCurrent ? 'translate-x-0 opacity-100 scale-100 z-20' : ''}
                   ${isPrev ? '-translate-x-[110%] opacity-0 scale-95 z-10' : ''}
                   ${isNext ? 'translate-x-[110%] opacity-0 scale-95 z-10' : ''}
@@ -193,31 +198,77 @@ export default function OceanResults() {
                 )}
 
                 {card.type === 'combo' && (
-                  <div className="space-y-6 overflow-y-auto hide-scrollbar pb-8 pt-4">
-                    <div className="flex justify-between items-center opacity-80 border-b border-black/10 pb-2">
-                      <span className="font-label-sm uppercase tracking-widest font-bold">Dynamic</span>
-                      <span className="font-label-sm font-bold tracking-widest">{card.pair}</span>
-                    </div>
-                    <div>
-                      <h2 className="font-headline-lg text-3xl font-bold leading-tight mb-2">{card.title}</h2>
-                      <p className="font-body-lg text-xl font-medium opacity-90">{card.summary}</p>
-                    </div>
-                    <p className="font-body-md opacity-85 leading-relaxed">{card.detail}</p>
-                    
-                    {card.watch_out && (
-                      <div className="bg-black/10 p-4 rounded-xl border-l-4 border-black/40 mt-4">
-                        <span className="block font-label-sm uppercase font-bold tracking-widest mb-1 opacity-80">Watch Out</span>
-                        <p className="font-body-md font-medium opacity-90">{card.watch_out}</p>
+                  <>
+                    <div className="flex flex-col h-full pb-6 pt-4">
+                      <div className="flex justify-between items-center opacity-80 border-b border-black/10 pb-2 mb-4">
+                        <span className="font-label-sm uppercase tracking-widest font-bold">Dynamic</span>
+                        <span className="font-label-sm font-bold tracking-widest">{card.pair}</span>
                       </div>
-                    )}
-                  </div>
+                      <div className="mb-4">
+                        <h2 className="font-headline-lg text-3xl font-bold leading-tight mb-2">{card.title}</h2>
+                        <p className="font-body-lg text-xl font-medium opacity-90">{card.summary}</p>
+                      </div>
+                      <div className="flex-grow overflow-y-auto pr-2 pb-10 hide-scrollbar">
+                        <p className="font-body-md opacity-85 leading-relaxed">
+                          {card.detail}
+                        </p>
+                      </div>
+                      
+                      {card.watch_out && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); setActiveWatchOut(idx); }}
+                          className="absolute bottom-6 right-6 flex items-center justify-center gap-1.5 bg-black/10 hover:bg-black/20 text-gray-700 py-2 px-3 rounded-xl font-label-sm uppercase font-bold tracking-widest transition-colors z-20 shadow-sm"
+                        >
+                          <span className="material-symbols-outlined text-[18px]">warning</span>
+                          Watch Out
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Card-specific Watchout Modal */}
+                    <AnimatePresence>
+                      {activeWatchOut === idx && (
+                        <>
+                          <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }} 
+                            className="absolute inset-0 bg-black/40 z-30"
+                            onClick={(e) => { e.stopPropagation(); setActiveWatchOut(null); }}
+                          />
+                          <motion.div 
+                            initial={{ y: '100%' }} 
+                            animate={{ y: 0 }} 
+                            exit={{ y: '100%' }} 
+                            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                            className={`absolute bottom-0 left-0 w-full h-[70%] p-8 z-40 shadow-[0_-10px_40px_rgba(0,0,0,0.2)] overflow-y-auto ${card.color} ${card.textColor}`}
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <div className="flex justify-between items-center mb-6">
+                              <div className="flex items-center gap-2 opacity-90">
+                                <span className="material-symbols-outlined">warning</span>
+                                <span className="font-label-lg uppercase tracking-widest font-bold">Watch Out</span>
+                              </div>
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setActiveWatchOut(null); }} 
+                                className="w-8 h-8 flex items-center justify-center rounded-full bg-black/10 hover:bg-black/20 transition-colors"
+                              >
+                                <span className="material-symbols-outlined text-[20px]">close</span>
+                              </button>
+                            </div>
+                            <p className="font-body-lg leading-relaxed opacity-90">{card.watch_out}</p>
+                          </motion.div>
+                        </>
+                      )}
+                    </AnimatePresence>
+                  </>
                 )}
               </div>
             );
           })}
           
-          {/* Navigation Controls */}
-          <div className="absolute bottom-4 w-full flex justify-center gap-3 px-8 max-w-md z-30 pointer-events-none">
+          {/* Desktop Navigation Controls */}
+          <div className="hidden md:flex absolute bottom-4 w-full justify-center gap-3 px-8 max-w-md z-30 pointer-events-none">
             <button 
               className={`w-12 h-12 rounded-full bg-black/20 text-white flex items-center justify-center backdrop-blur-sm pointer-events-auto transition-opacity ${currentCardIndex === 0 ? 'opacity-0' : 'opacity-100 hover:bg-black/40'}`}
               onClick={(e) => { e.stopPropagation(); setCurrentCardIndex(Math.max(0, currentCardIndex - 1)); }}
@@ -233,8 +284,73 @@ export default function OceanResults() {
           </div>
         </section>
 
+        {/* Mobile Navigation Controls (Under the cards in document flow) */}
+        <div className="flex md:hidden w-full flex-col gap-6 px-6 py-0">
+          <div className="flex justify-center items-center gap-4 sm:gap-6 w-full">
+            {/* Prev Button */}
+            <button 
+              className={`w-14 h-14 flex items-center justify-center rounded-full bg-white/30 text-black shadow-sm border border-black/5 backdrop-blur-sm transition-all ${currentCardIndex === 0 ? 'opacity-50 pointer-events-none' : 'opacity-100 active:scale-95'}`}
+              onClick={() => setCurrentCardIndex(Math.max(0, currentCardIndex - 1))}
+            >
+              <span className="material-symbols-outlined text-[24px]">replay</span>
+            </button>
+            
+            {/* Cross Button (Reject / Next) */}
+            <button 
+              className={`w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-lg text-gray-700 border border-black/5 transition-all ${currentCardIndex === storyCards.length - 1 ? 'opacity-50 pointer-events-none' : 'opacity-100 active:scale-95 hover:scale-105'}`}
+              onClick={() => setCurrentCardIndex(Math.min(storyCards.length - 1, currentCardIndex + 1))}
+            >
+              <span className="material-symbols-outlined text-[32px] font-bold">close</span>
+            </button>
+
+            {/* Heart Button (Accept / Next) */}
+            <button 
+              className={`w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-lg text-red-500 border border-black/5 transition-all ${currentCardIndex === storyCards.length - 1 ? 'opacity-50 pointer-events-none' : 'opacity-100 active:scale-95 hover:scale-105'}`}
+              onClick={() => setCurrentCardIndex(Math.min(storyCards.length - 1, currentCardIndex + 1))}
+            >
+              <span className="material-symbols-outlined text-[32px] font-bold" style={{ fontVariationSettings: "'FILL' 1" }}>favorite</span>
+            </button>
+
+            {/* Next Button */}
+            <button 
+              className={`w-14 h-14 flex items-center justify-center rounded-full bg-white/30 text-black shadow-sm border border-black/5 backdrop-blur-sm transition-all ${currentCardIndex === storyCards.length - 1 ? 'opacity-50 pointer-events-none' : 'opacity-100 active:scale-95'}`}
+              onClick={() => setCurrentCardIndex(Math.min(storyCards.length - 1, currentCardIndex + 1))}
+            >
+              <span className="material-symbols-outlined text-[24px]">skip_next</span>
+            </button>
+          </div>
+          <button
+            className="w-full flex items-center justify-center gap-2 bg-black/10 text-gray-500 py-3 rounded-xl font-label-sm uppercase font-bold tracking-widest transition-colors active:bg-black/20"
+            onClick={() => {
+              if (isDeepDiveVisible) {
+                setIsDeepDiveVisible(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              } else {
+                setIsDeepDiveVisible(true);
+                setTimeout(() => {
+                  const deepDiveEl = document.getElementById('deep-dive');
+                  if (deepDiveEl) {
+                    const y = deepDiveEl.getBoundingClientRect().top + window.scrollY + 820;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                  }
+                }, 100);
+              }
+            }}
+          >
+            <span className="material-symbols-outlined text-[20px]">
+              {isDeepDiveVisible ? 'keyboard_double_arrow_up' : 'keyboard_double_arrow_down'}
+            </span>
+            {isDeepDiveVisible ? 'Close Deep Dive' : 'Deep Dive'}
+          </button>
+        </div>
+
         {/* BELOW THE FOLD: The Deep Dive */}
-        <section className="max-w-3xl mx-auto px-margin-mobile py-stack-lg space-y-stack-lg">
+        <section 
+          id="deep-dive" 
+          className={`max-w-3xl mx-auto px-margin-mobile transition-all duration-700 ease-in-out overflow-hidden ${
+            isDeepDiveVisible ? 'max-h-[5000px] py-stack-lg opacity-100' : 'max-h-0 py-0 opacity-0'
+          }`}
+        >
           <div className="text-center mb-8">
             <h3 className="font-headline-lg text-headline-lg font-bold">The Deep Dive</h3>
             <p className="text-on-surface-variant mt-2">Explore the raw data behind your personality dynamics.</p>
@@ -311,10 +427,16 @@ export default function OceanResults() {
             })}
           </div>
 
-          <div className="flex justify-center pt-8">
+          <div className="flex justify-center gap-4 pt-8">
+            <button 
+              onClick={() => navigate('/test-intro')}
+              className="bg-surface-container-high text-primary border border-primary/20 py-2 px-4 rounded-full font-label-lg font-bold tracking-widest hover:scale-105 active:scale-95 transition-transform shadow-sm"
+            >
+              Take New Test
+            </button>
             <button 
               onClick={() => navigate('/home')}
-              className="bg-primary text-on-primary py-4 px-8 rounded-full font-label-lg font-bold tracking-widest hover:scale-105 active:scale-95 transition-transform shadow-lg"
+              className="bg-primary text-on-primary py-2 px-4 rounded-full font-label-lg font-bold tracking-widest hover:scale-105 active:scale-95 transition-transform shadow-lg"
             >
               Go to Dashboard
             </button>
@@ -323,11 +445,6 @@ export default function OceanResults() {
 
       </main>
       
-      {/* Spacer for mobile nav */}
-      <div className="h-24 md:hidden"></div>
-
-      
-
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

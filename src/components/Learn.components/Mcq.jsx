@@ -82,7 +82,7 @@ const MultipleChoice = ({ data, next, deferFeedback = false }) => {
 
   return (
     <div className="p-0 md:p-8 flex-1 flex">
-      <section className="min-h-[calc(100dvh-58px)] md:min-h-0 w-full bg-white border-0 md:border border-slate-200 rounded-none md:rounded-3xl shadow-none md:shadow-sm p-6 md:p-9 flex flex-col">
+      <section className="min-h-[calc(100dvh-150px)] md:min-h-0 w-full bg-white border-0 md:border border-slate-200 rounded-none md:rounded-3xl shadow-none md:shadow-sm p-6 md:p-9 flex flex-col">
         <div>
         <div className="flex items-center gap-2 text-purple-700 text-xs font-bold uppercase tracking-wider mb-3">
           <Layers3 size={17} />

@@ -4,6 +4,7 @@ import { BookOpen, Dumbbell, Lock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { getLearnProgress, getLevelProgress, saveLevelProgress } from '../../utils/learnProgress';
+import OceanElement from '../OceanElement';
 
 const IsometricNode = ({ state }) => {
   // state: 'completed', 'active', 'locked'
@@ -11,24 +12,30 @@ const IsometricNode = ({ state }) => {
     return (
       <div className="relative w-32 h-32 flex items-center justify-center mt-2">
         {/* Glow effect */}
-        <div className="absolute bottom-2 w-28 h-12 bg-purple-400 rounded-full blur-xl opacity-50"></div>
+        <div className="absolute bottom-2 w-28 h-12 bg-cyan-300 rounded-full blur-xl opacity-50"></div>
         
         {/* Base shadow/bottom of cylinder */}
-        <div className="absolute bottom-2 w-24 h-10 bg-[#7c3aed] rounded-[50%]"></div>
+        <div className="absolute bottom-2 w-24 h-10 bg-[#0f628b] rounded-[50%]"></div>
         
         {/* Platform top */}
-        <div className="absolute bottom-4 w-24 h-10 bg-[#e9d5ff] rounded-[50%] border-b-[4px] border-[#000] flex items-center justify-center shadow-inner">
+        <div className="absolute bottom-4 w-24 h-10 bg-[#bce9f3] rounded-[50%] border-b-[4px] border-[#05263b] flex items-center justify-center shadow-inner">
             {/* Bright core */}
-            <div className="w-14 h-6 bg-white rounded-[50%] shadow-[0_0_15px_#d8b4fe]"></div>
+            <div className="w-14 h-6 bg-white rounded-[50%] shadow-[0_0_15px_#7ed4e6]"></div>
         </div>
         
-        {/* Hovering Crystal/Icon */}
+        {/* Active ocean element */}
         <motion.div 
           animate={{ y: [-6, 6, -6] }} 
           transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
-          className="relative z-10 w-12 h-12 bg-red-700 rounded-xl flex items-center justify-center shadow-[0_8px_15px_rgba(34,197,94,0.4)] border-[3px] border-white rotate-45 mb-10"
+          className="relative z-10 w-24 h-24 mb-12 drop-shadow-[0_10px_18px_rgba(15,98,139,0.35)]"
         >
-           <div className="-rotate-45 bg-black w-4 h-4 rounded-sm shadow-sm"></div>
+          <OceanElement
+            size={96}
+            animated
+            interactive={false}
+            bubbleDensity={0.45}
+            birdCount={2}
+          />
         </motion.div>
       </div>
     );
@@ -109,7 +116,7 @@ export const Map = ({ skillsData = [] }) => {
           <div key={skill.id || skillIndex} className="w-full flex flex-col md:flex-row mb-24 md:items-end md:justify-center relative">
             
             {/* Skill Card (Desktop Left / Mobile Bottom) */}
-            <div className="order-2  bg-red-500   md:order-1 w-full md:w-[340px] md:sticky md:bottom-24 bg-white rounded-[20px] p-6 mt-12 md:mt-0 md:mr-16 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-500 shrink-0">
+            <div className="order-2 md:order-1 w-full md:w-[340px] md:sticky md:bottom-24 bg-white rounded-[20px] p-6 mt-12 md:mt-0 md:mr-16 shadow-[0_2px_12px_rgba(0,0,0,0.06)] border border-gray-500 shrink-0">
               <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-5">
                  <BookOpen className="text-purple-600" size={32} />
               </div>

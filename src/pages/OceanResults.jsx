@@ -146,7 +146,11 @@ export default function OceanResults() {
     <div className={`min-h-screen flex flex-col font-body-md pb-24 transition-colors duration-500 ease-in-out ${currentCard.color} ${currentCard.textColor}`}>
       {/* Top App Bar */}
       <header className="w-full sticky top-0 z-50 bg-black/5 backdrop-blur-md border-b border-black/5">
-        <div className="flex items-center justify-between px-margin-mobile py-4 max-w-container-max mx-auto">
+        {/* A back button pointing to home */}
+        <Link to="/home" className="absolute top-4 left-4 flex items-center gap-2 cursor-pointer active:opacity-70 z-50">
+          <span className="material-symbols-outlined text-gray-600 text-[24px]">arrow_back</span>
+        </Link>
+        <div className="flex items-center justify-center px-margin-mobile py-4 max-w-container-max mx-auto">
           <Link to="/home" className="flex items-center gap-2 cursor-pointer active:opacity-70">
             <span className="material-symbols-outlined text-gray-600 text-[24px]">psychology</span>
             <span className="font-display-lg-mobile text-display-lg-mobile tracking-tighter text-gray-600 font-bold">OCEAN</span>

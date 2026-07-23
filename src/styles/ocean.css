@@ -1,0 +1,35 @@
+/* Container aspect ratio & responsive bounds */
+.ocean-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--ocean-size, 600px);
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+  user-select: none;
+  touch-action: none;
+  perspective: 1000px;
+}
+
+.ocean-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  will-change: transform;
+}
+
+/* Color tokens based on the ocean element artwork */
+:root {
+  --ocean-sky-light: #ffffff;
+  --ocean-sky-mid: #bce9f3;
+  --ocean-sky-dark: #63c6da;
+  --ocean-ice-top-shadow: #3b8ea5;
+  --ocean-ice-sub-bright: #1da8cc;
+  --ocean-ice-sub-mid: #0f628b;
+  --ocean-ice-sub-dark: #0a3d59;
+  --ocean-ice-sub-deep: #05263b;
+  --ocean-waterline: #ffffff;
+  --ocean-glow: #1da8cc;
+}
